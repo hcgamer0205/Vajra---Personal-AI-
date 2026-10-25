@@ -1,0 +1,39 @@
+{
+  "appId": "com.vajra.ai.assistant",
+  "productName": "VAJRA",
+  "copyright": "Copyright © 2026 VAJRA Systems",
+  "directories": {
+    "output": "dist_electron",
+    "buildResources": "build"
+  },
+  "files": [
+    "dist/**/*",
+    "dist-electron/**/*",
+    "package.json"
+  ],
+  "extraMetadata": {
+    "main": "dist-electron/main.cjs"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "build/icon.png",
+    "artifactName": "VAJRA-Setup.exe"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": "always",
+    "createStartMenuShortcut": true,
+    "shortcutName": "VAJRA",
+    "uninstallDisplayName": "VAJRA",
+    "deleteAppDataOnUninstall": false,
+    "runAfterFinish": true
+  }
+}

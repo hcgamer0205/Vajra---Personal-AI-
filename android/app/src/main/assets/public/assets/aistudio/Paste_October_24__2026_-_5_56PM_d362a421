@@ -1,0 +1,1334 @@
+VAJRA MOBILE — INDIA'S JARVIS
+
+ALL-ROUNDER MASTER IMPLEMENTATION PROMPT
+
+Intelligence • Indian Languages • Voice • Memory • Android Control • Proactivity • Autonomy • Security • Reliability • Release
+
+0. YOUR MISSION
+
+Act as a principal AI architect, senior Android engineer, conversational AI researcher, voice systems engineer, security specialist, product designer, and QA/release engineer.
+
+You are working on an existing project: VAJRA Mobile, an Indian, JARVIS-inspired personal AI assistant for Android.
+
+Your mission is to evolve VAJRA into a complete, reliable, multilingual personal AI that can understand the user, remember relevant context, communicate naturally, plan work, operate authorized phone capabilities, coordinate multi-step tasks, detect failures, recover safely, and proactively help when permitted.
+
+This is an implementation task, not a proposal-writing exercise.
+
+Inspect the repository, audit existing features, implement missing or weak capabilities, preserve working systems, test the real execution paths, build the Android APK, and provide verifiable evidence.
+
+Do not merely produce architecture documents, mockups, simulated controls, placeholder functions, hardcoded success responses, or a list of future ideas.
+
+Core principle
+
+VAJRA must behave like a coherent personal intelligence system rather than a collection of disconnected features.
+
+Its operating cycle is:
+
+UNDERSTAND → REMEMBER → REASON → PLAN → AUTHORIZE → ACT → OBSERVE → VERIFY → RESPOND → LEARN APPROPRIATELY
+
+Use this cycle where relevant. Simple questions should remain fast and simple.
+
+---
+
+PART 1 — REPOSITORY AUDIT AND PRESERVATION
+
+1.1 Inspect before changing
+
+Audit the complete existing codebase before implementation.
+
+Inspect:
+
+- Project structure and package scripts
+- React, TypeScript, Vite and Capacitor configuration
+- Android native code, manifests, permissions and plugins
+- Backend endpoints and model-provider integrations
+- Existing AI orchestration and tool execution
+- Voice input, wake-word detection and TTS
+- Memory, notes, settings and conversation history
+- Self-awareness and capability reporting
+- Android control engine and accessibility components
+- Action policy, confirmation and cancellation
+- Task planner, verification and recovery
+- Notifications and scheduling
+- Multimodal input and image handling
+- UI components and responsive behavior
+- Automated tests, build scripts and APK artifacts
+- Security-sensitive storage and network boundaries
+
+Search for existing modules before creating new ones.
+
+1.2 Build an implementation inventory
+
+For every major feature, document:
+
+- Existing files and responsibilities
+- Actual execution path
+- Dependencies and permissions
+- Current implementation status
+- Automated test coverage
+- Known limitations
+- Required modifications
+
+Classify each feature as:
+
+- Implemented and verified
+- Implemented but partially verified
+- Partially implemented
+- Missing
+- Blocked by provider, permission, device, or platform
+- Requires physical-device testing
+
+Do not mark a feature as verified merely because its class, button, API endpoint, or unit test exists.
+
+1.3 Preservation rules
+
+- Preserve all existing working features and useful user data.
+- Avoid unnecessary rewrites.
+- Do not create duplicate memory systems, voice engines, policy engines, task planners, or competing sources of truth.
+- Maintain compatibility with existing APIs unless a justified migration is required.
+- Use incremental changes and appropriate regression tests.
+- Do not delete existing features just to simplify the implementation.
+- If an architectural change is necessary, explain the reason and migrate safely.
+- Keep VAJRA Mobile separate from any PC/desktop project.
+
+---
+
+PART 2 — THE CENTRAL VAJRA INTELLIGENCE ENGINE
+
+2.1 Shared intelligence architecture
+
+Implement or improve one central intelligence and orchestration layer that coordinates:
+
+1. Conversation manager
+2. Context and reference resolver
+3. Intent and entity extraction
+4. Language detection and preference resolution
+5. Memory retrieval
+6. Personal world model
+7. Capability registry
+8. Confidence and ambiguity handling
+9. Reasoning and task planning
+10. Skill and tool routing
+11. Risk and authorization policy
+12. Action execution
+13. Observation and verification
+14. Response generation
+15. Optional reflection and memory updates
+16. Error recovery and task continuation
+
+Use existing modules wherever possible.
+
+The central orchestrator should select the appropriate path for each request:
+
+- Direct conversational response
+- Knowledge retrieval
+- Web search, when available and appropriate
+- Memory retrieval
+- Native Android action
+- Multi-step mission
+- Clarification request
+- Confirmation-required action
+- Safe refusal or unsupported-capability explanation
+
+Do not send every message through a heavy planning pipeline.
+
+2.2 Genuine contextual understanding
+
+VAJRA should understand conversational references and follow-ups.
+
+Example:
+
+User: "Find three options."
+User: "Compare their prices."
+User: "Which is best for my needs?"
+User: "Tell me more about the second one."
+
+The assistant should retain the relevant entities and task context.
+
+Support:
+
+- Pronouns and references
+- Follow-up questions
+- Topic changes
+- Conversation summaries
+- Corrections and changed instructions
+- Relative dates and times
+- Relevant previous decisions
+- Explicit constraints
+- Multiple constraints within one request
+- Ambiguity detection
+- Confidence-aware clarification
+
+Never invent missing facts to make an answer appear complete.
+
+2.3 Reasoning and decision quality
+
+For significant tasks, VAJRA should:
+
+- Identify the requested outcome.
+- Determine necessary information.
+- Inspect available capabilities.
+- Develop a bounded plan.
+- Identify risks and dependencies.
+- Ask for missing essential information.
+- Obtain authorization where required.
+- Execute using approved tools.
+- Observe actual results.
+- Verify the outcome.
+- Explain any incomplete steps.
+
+Use model APIs or local capabilities according to the existing architecture and configured availability.
+
+Do not claim that the model can reason perfectly, access all apps, operate offline universally, or control the phone without platform permission.
+
+2.4 Intelligence quality controls
+
+Implement:
+
+- Structured tool arguments
+- Schema validation
+- Bounded planning
+- Maximum step limits
+- Execution timeouts
+- Cancellation propagation
+- Bounded retries
+- Error classification
+- Result verification
+- Hallucination-resistant tool responses
+- Source attribution when available
+- Explicit uncertainty
+- Fallback behavior when a provider is unavailable
+
+External content, web pages and model-generated text must never override system security policies.
+
+---
+
+PART 3 — INDIA-FIRST MULTILINGUAL EXPERIENCE
+
+3.1 Language selection
+
+Build a language selection and capability system that includes the following roadmap:
+
+- English (India)
+- हिन्दी — Hindi
+- বাংলা — Bengali
+- मराठी — Marathi
+- ગુજરાતી — Gujarati
+- ਪੰਜਾਬੀ — Punjabi
+- தமிழ் — Tamil
+- తెలుగు — Telugu
+- ಕನ್ನಡ — Kannada
+- മലയാളം — Malayalam
+- ଓଡ଼ିଆ — Odia
+- অসমীয়া — Assamese
+- اردو — Urdu
+- Sanskrit, where practical
+- Bhojpuri
+- Rajasthani
+- Haryanvi
+- Chhattisgarhi
+- Konkani
+- Maithili
+
+Treat this as a product roadmap, not a claim of equal support across every provider.
+
+For each language, track independently:
+
+- Text input
+- Text generation
+- Speech recognition
+- Spoken output
+- Automatic detection
+- Romanized input
+- Mixed-language support
+- Tested locales and known limitations
+
+Never advertise a language or voice as fully supported without testing its actual provider path.
+
+3.2 Language controls
+
+Provide settings for:
+
+- Preferred conversation language
+- Spoken response language
+- Speech recognition language
+- Automatic language detection
+- Code-switching
+- Script preference, where supported
+- Voice selection
+- Speech rate
+- Optional pitch
+- Voice preview
+- Translation preference
+- Formality and response style
+
+Allow immediate language switching from the conversation interface.
+
+3.3 Hindi, Hinglish and regional-language understanding
+
+Understand natural requests such as:
+
+- "Vajra, kal subah mujhe yaad dila dena."
+- "Bhai, Wi-Fi settings khol."
+- "Mera last project kahan tak pahuncha tha?"
+- "Isko simple Hindi mein samjha."
+- "Ab iska English summary de."
+- "Pehle options compare karo, phir best suggest karna."
+- "Kal wali baat se continue kar."
+- "Ruko, cancel kar."
+- "Ye task pause kar aur baad mein continue karna."
+
+These are test examples, not a hardcoded command list.
+
+3.4 Language behavior rules
+
+- Respect the user's explicit language choice.
+- In automatic mode, use the current utterance and conversation context.
+- Support code-switching when the underlying model and speech provider allow it.
+- Preserve names, numbers, technical terms, dates and addresses.
+- Avoid unexpected language switching.
+- Handle Romanized Hindi when supported.
+- Ask a short clarification if recognition confidence is too low.
+- Never treat an accent or dialect as inherently incorrect.
+- Do not claim a specific accent if the selected TTS voice does not provide it.
+- Provide text fallback when speech is unavailable.
+
+3.5 Indian context
+
+Support Indian formats and conventions where relevant:
+
+- INR and Indian number formatting
+- Indian time zone defaults, with user-configurable settings
+- DD/MM/YYYY or configurable date formatting
+- 12-hour and 24-hour time
+- Indian phone-number input and validation
+- Local-language dates and numerals where supported
+- Indian place names and transliteration
+- Regional preferences without stereotyping
+- Configurable location and local-service access
+
+Never infer a user's religion, caste, political views, or other sensitive identity from language, location, or cultural interests.
+
+---
+
+PART 4 — VOICE-FIRST JARVIS EXPERIENCE
+
+4.1 Voice pipeline
+
+Implement or improve a reliable lifecycle:
+
+IDLE → LISTENING → PROCESSING → PLANNING → AWAITING_CONFIRMATION (if required) → EXECUTING → VERIFYING → SPEAKING → IDLE
+
+Support appropriate additional states such as PAUSED, RECOVERING, BACKGROUND, and ERROR.
+
+Maintain one authoritative voice state. Prevent overlapping recognizers, duplicate speech, and inconsistent UI states.
+
+4.2 Natural voice output
+
+Create an original VAJRA voice identity:
+
+- Warm and composed
+- Clear and articulate
+- Intelligent and professional
+- Natural pacing and pauses
+- Appropriate emphasis
+- Premium feel without exaggerated effects
+- Clear Hindi and Hinglish pronunciation when supported
+
+Provider priority:
+
+1. Configured premium neural TTS, if legitimately available
+2. Suitable native Android TTS
+3. Supported browser speech fallback
+
+Discover actual available voices and locales at runtime.
+
+Display provider status and relevant limitations.
+
+Do not hardcode secret API keys in the app or package credentials in the APK. Premium providers must use appropriate server-side credential handling.
+
+4.3 Speech recognition and interruption
+
+Implement:
+
+- Microphone permission handling
+- Clear listening indicator
+- Partial recognition where available
+- Final transcript handling
+- Speech recognition timeouts
+- Silence handling
+- Permission denial recovery
+- Network error recovery
+- TTS queue management
+- Speech interruption and cancellation
+- Duplicate recognition prevention
+- Lifecycle cleanup
+- Appropriate audio focus handling
+
+Support commands such as:
+
+- "Stop."
+- "Ruko."
+- "Cancel."
+- "Pause."
+- "Resume."
+- "Repeat that."
+- "Speak more slowly."
+
+A global stop command should cancel active VAJRA-controlled speech, recognition, and cancellable mission steps promptly.
+
+It must not falsely claim to reverse an already completed external action.
+
+4.4 Wake word
+
+If wake-word support exists, audit its actual implementation and reliability.
+
+If not, determine whether a supported, efficient implementation is feasible.
+
+Requirements:
+
+- Explicit opt-in
+- Clear microphone and background-operation disclosures
+- Visible enabled/disabled state
+- Start/stop controls
+- Battery-conscious operation
+- Lifecycle cleanup
+- No unnecessary background loops
+- No false claim of always-on availability
+- No hidden recording
+- Respect Android background restrictions
+
+Test wake-word behavior on physical devices.
+
+Do not guarantee persistent wake-word listening when Android or device restrictions prevent it.
+
+---
+
+PART 5 — MEMORY FABRIC AND PERSONAL WORLD MODEL
+
+5.1 Separate memory categories
+
+Use a coherent memory architecture for:
+
+1. Short-term conversation context
+2. User-approved long-term memories
+3. User preferences
+4. Active projects
+5. Ongoing missions
+6. Notes and saved content
+7. Explicit reminders
+8. Task history and verification results
+9. Temporary execution state
+
+Reuse the existing architecture if it already provides these functions.
+
+Do not merge ordinary notes with personal memory or active mission state.
+
+5.2 Memory lifecycle
+
+Implement:
+
+- Explicit memory creation
+- Appropriate, transparent memory suggestions
+- Retrieval by relevance
+- Recency-aware retrieval
+- Source and timestamp metadata
+- Memory correction
+- Memory deletion
+- User review and export, where feasible
+- Retention settings
+- Expiry for temporary records
+- Duplicate detection
+- Stale-memory detection
+- Conflict handling
+- Storage failure recovery
+
+A memory should not be treated as permanently true just because it was saved.
+
+5.3 Consent and privacy
+
+- Do not save passwords, API keys, authentication tokens, recovery codes, or other credentials in conversational memory.
+- Do not silently turn every conversation into permanent memory.
+- Ask or clearly disclose when a meaningful long-term memory should be saved, according to the configured privacy policy.
+- Allow the user to inspect and delete saved memories.
+- Protect sensitive data from unnecessary logs.
+- Use appropriate local storage protections and server-side access controls.
+- Explain whether data is stored locally or transmitted to a configured provider.
+- Never claim encrypted storage unless it is actually implemented and verified.
+
+5.4 Personal world model
+
+Represent relevant information about:
+
+- User-selected preferences
+- Active projects
+- Explicit goals
+- Current missions
+- User-approved routines
+- Pending tasks
+- Known constraints
+- Previous verified outcomes
+
+Keep facts, inferences and assumptions distinct.
+
+Use memory only when relevant to the current request. Do not over-personalize every answer.
+
+---
+
+PART 6 — PROACTIVE ASSISTANCE ENGINE
+
+VAJRA should be able to initiate useful assistance when the user has authorized it.
+
+6.1 Proactive features
+
+Implement, where supported:
+
+- Scheduled reminders
+- User-configured daily briefings
+- Follow-up reminders for unfinished tasks
+- Upcoming-event notifications
+- Approved recurring routines
+- Notifications about task completion or failure
+- Relevant project resumption suggestions
+- Helpful suggestions based on explicit user preferences
+
+Do not invent tasks, silently monitor unrelated activity, or send unnecessary notifications.
+
+6.2 User controls
+
+Provide settings for:
+
+- Proactive assistance on/off
+- Allowed notification categories
+- Quiet hours
+- Reminder permissions
+- Briefing schedules
+- Notification frequency
+- Background behavior
+- Project-specific suggestions
+
+Respect Android notification permissions, battery policies, and background execution limits.
+
+6.3 Initiative boundaries
+
+Distinguish three modes:
+
+Reactive: Respond only when asked.
+
+Assistive: Offer useful suggestions and ask before acting.
+
+Authorized proactive: Perform predefined low-risk actions or reminders within explicitly configured boundaries.
+
+High-impact actions must still follow the applicable confirmation policy.
+
+Never interpret general enthusiasm for autonomy as permission to send messages, spend money, delete data, or perform sensitive actions.
+
+---
+
+PART 7 — ANDROID CONTROL AND DEVICE CAPABILITIES
+
+7.1 Capability registry
+
+Create or improve a single registry describing:
+
+- Capability name
+- Native or web implementation
+- Device and Android requirements
+- Required permissions
+- Availability
+- Current readiness
+- Unsupported conditions
+- Actual verification status
+
+The assistant must query this registry before attempting a device action.
+
+7.2 Supported capability areas
+
+Implement or verify applicable capabilities such as:
+
+- Launch supported installed apps
+- Open Android settings screens
+- Open Wi-Fi, Bluetooth, display and sound settings
+- Open the camera application
+- Open the dialer
+- Prepare SMS and email drafts
+- Open maps and navigation destinations
+- Adjust supported audio volume controls
+- Read permitted battery and charging information
+- Read available connectivity information
+- Manage VAJRA notes and reminders
+- Open supported websites
+- Share content using Android share interfaces
+- Copy content to the clipboard
+- Open supported telephone, mail and web links
+- Read selected files only through permitted APIs and explicit user access
+
+Use appropriate Android intents, native plugins and supported web APIs.
+
+7.3 Honest capability boundaries
+
+Distinguish between:
+
+- Opening a screen
+- Preparing a draft
+- Requesting a system action
+- Completing an action
+- Confirming the actual result
+
+Opening Wi-Fi settings does not prove that Wi-Fi was enabled.
+
+Opening an SMS composer does not prove the SMS was sent.
+
+Launching an app does not prove a requested in-app operation was completed.
+
+If an action requires manual user interaction, tell the user.
+
+7.4 Accessibility and cross-app interaction
+
+Use Android Accessibility Services only when the functionality genuinely requires them and the user explicitly enables the service through Android settings.
+
+Requirements:
+
+- Explain why the service is needed.
+- Clearly disclose its scope.
+- Use the least privilege possible.
+- Do not bypass secure screens, authentication, biometrics, or protected financial interfaces.
+- Do not silently inspect unrelated app content.
+- Do not claim general cross-app automation unless it has been implemented and tested.
+- Provide a reliable disable path.
+- Provide a visible emergency stop.
+- Verify compatibility with Android and target apps.
+
+Respect Android platform policies and applicable distribution rules.
+
+---
+
+PART 8 — MISSION ORCHESTRATOR AND TASK AUTOMATION
+
+8.1 Durable task engine
+
+Build or improve a bounded, resumable mission orchestrator.
+
+Each mission should track:
+
+- Unique mission ID
+- User goal
+- Plan and steps
+- Current state
+- Completion criteria
+- Required permissions
+- Confirmation requirements
+- Step results
+- Retry counts
+- Cancellation state
+- Recovery information
+- Timestamps
+- Verification evidence
+
+Use durable storage for missions that need to survive process restarts.
+
+Do not persist sensitive transient data unnecessarily.
+
+8.2 Mission lifecycle
+
+A suitable lifecycle is:
+
+CREATED → UNDERSTANDING → PLANNING → AWAITING_APPROVAL → RUNNING → VERIFYING → COMPLETED
+
+Additional states:
+
+- PAUSED
+- CANCELLED
+- FAILED
+- RECOVERING
+- NEEDS_USER_INPUT
+- PARTIALLY_COMPLETED
+
+Use only relevant transitions and validate all state changes.
+
+8.3 Multi-step tasks
+
+VAJRA should be able to:
+
+- Break a request into bounded steps.
+- Identify dependencies.
+- Ask questions when essential details are missing.
+- Request approval before sensitive operations.
+- Execute authorized steps.
+- Verify each meaningful result.
+- Stop safely on cancellation.
+- Retry only when appropriate.
+- Recover after transient failures.
+- Resume from a safe checkpoint.
+- Explain partial completion.
+
+Never claim that a mission completed if only some steps succeeded.
+
+8.4 Rollback and recovery
+
+Use rollback only when the operation is genuinely reversible and the rollback mechanism is implemented.
+
+Do not promise rollback for irreversible actions such as messages already sent.
+
+For irreversible or externally visible actions, prefer:
+
+- Preview
+- Explicit confirmation
+- Execution
+- Verification
+- Honest outcome reporting
+
+---
+
+PART 9 — SECURITY, PERMISSIONS AND TRUST
+
+9.1 Mandatory action pipeline
+
+Every device-control or tool action must pass through:
+
+MODEL OR USER REQUEST → STRUCTURED ACTION → SCHEMA VALIDATION → RISK CLASSIFICATION → POLICY CHECK → PERMISSION CHECK → USER CONFIRMATION WHEN REQUIRED → EXECUTION → OBSERVATION → VERIFICATION → AUDIT RESULT
+
+The language model must never directly bypass native permission checks or execute privileged operations through unvalidated free-form output.
+
+9.2 Risk classes
+
+Low risk: Ordinary informational responses, opening approved settings screens, local calculations.
+
+Moderate risk: Actions that change device settings, create persistent data, or prepare external actions. Apply the appropriate OS dialog, policy, or user confirmation.
+
+High risk: Sending communications, deleting meaningful data, sharing private information, purchases, or other sensitive or externally consequential actions. Require explicit, action-specific authorization.
+
+Certain prohibited or unsupported actions must not be made available simply because the user confirms them.
+
+9.3 Confirmation integrity
+
+Confirmations must be:
+
+- Specific to the intended action
+- Bound to a unique action or mission ID
+- Invalidated if important action parameters change
+- Expired after an appropriate interval
+- Resistant to replay
+- Required again when the risk changes
+
+A vague "yes" from an unrelated conversation must not authorize an arbitrary pending action.
+
+9.4 Prompt injection and tool security
+
+Treat web pages, documents, model output and other external content as untrusted data.
+
+They cannot override:
+
+- System rules
+- Permission requirements
+- User privacy
+- Confirmation policy
+- Tool allowlists
+- Credential handling
+
+Validate every tool input and output.
+
+Use server-side authorization for backend operations.
+
+Never expose API secrets in frontend bundles, APK assets, logs, source maps, or ordinary local storage.
+
+9.5 Emergency stop
+
+Implement one reliable global stop mechanism that:
+
+- Stops or cancels VAJRA-controlled speech
+- Stops listening where possible
+- Cancels cancellable planning and execution
+- Prevents new mission steps from starting
+- Clears stale pending confirmations
+- Updates the visible runtime state
+- Reports which operations could not be reversed
+
+Do not falsely claim that an already executed external operation has been undone.
+
+---
+
+PART 10 — MULTIMODAL INTELLIGENCE
+
+10.1 Image and document understanding
+
+Where supported by the configured model or local capability, allow the user to provide:
+
+- Photographs
+- Screenshots
+- Documents
+- Error messages
+- Product images
+- Diagrams
+- Selected screen captures
+
+VAJRA should be able to describe, extract, summarize, compare and answer questions about user-provided content.
+
+Use OCR or document parsing when appropriate.
+
+10.2 Privacy boundaries
+
+- Process only content the user supplies or explicitly authorizes VAJRA to access.
+- Do not secretly capture the screen.
+- Do not silently collect images or documents from other apps.
+- Request permissions when required.
+- Clearly explain when content must be transmitted to an external provider.
+- Avoid retaining uploaded content unnecessarily.
+- Treat text extracted from images and documents as untrusted input.
+
+10.3 Evidence-grounded responses
+
+Distinguish visible evidence from inference.
+
+If text is unreadable or an image is ambiguous, say so.
+
+Do not claim visual understanding if the selected provider does not support the submitted media type.
+
+---
+
+PART 11 — SELF-AWARENESS, TRANSPARENCY AND LEARNING
+
+11.1 Runtime self-awareness
+
+Create one reliable runtime state source that tracks:
+
+- Current conversation state
+- Current voice state
+- Current mission
+- Current action
+- Pending confirmation
+- Available tools
+- Permission status
+- Provider availability
+- Network-dependent capabilities
+- Current errors
+- Last verified outcome
+
+Reuse the existing self-awareness module if it already covers these needs.
+
+11.2 Truthful self-reporting
+
+VAJRA should be able to answer:
+
+- "What are you doing?"
+- "Is my task complete?"
+- "Why did it fail?"
+- "Can you control this app?"
+- "Are you listening?"
+- "Are you online?"
+- "Can you speak Hindi?"
+- "What can you do without internet?"
+- "What do you remember about this project?"
+
+Answers must be generated from actual runtime state, capability data and relevant memory—not hardcoded claims.
+
+Do not report a task as complete before verification.
+
+11.3 Learning and reflection
+
+After significant missions, optionally record a compact reflection:
+
+- Goal
+- Outcome
+- Verified steps
+- Failure category
+- Recovery taken
+- Useful future improvement
+
+Keep reflection records bounded and privacy-conscious.
+
+Do not silently modify security policies, grant new permissions, or expand autonomy based on self-generated learning.
+
+The system can improve preferences and task handling without claiming human-like consciousness.
+
+---
+
+PART 12 — PREMIUM MOBILE UI/UX
+
+12.1 Design direction
+
+Create an original, premium Indian futuristic interface.
+
+Visual characteristics:
+
+- Deep midnight or graphite backgrounds
+- Refined saffron, teal, blue or restrained luminous accents
+- A distinctive VAJRA Energy Core
+- Clear listening, thinking, executing and speaking states
+- Subtle motion
+- Clean typography
+- Strong contrast
+- Minimal visual clutter
+- Consistent iconography
+- Original Indian-inspired geometric details used tastefully
+
+Do not overcrowd the screen with fake holograms, excessive glow, spinning graphics or decorative metrics.
+
+12.2 Main screen
+
+The main screen should prioritize:
+
+- Energy Core
+- Current assistant state
+- Conversation entry
+- Voice activation
+- Quick interruption/stop
+- Relevant mission status
+- Shortcuts to memory, notes, language and settings
+
+Use bottom sheets, drawers or appropriate mobile navigation rather than a desktop-style permanent sidebar.
+
+12.3 Important screens
+
+Implement or refine:
+
+- Main assistant
+- Conversation history
+- Language and voice settings
+- Memory management
+- Notes
+- Mission/task manager
+- Capability and permission status
+- Transparency/self-awareness panel
+- Proactive assistance settings
+- Privacy and security controls
+- Diagnostics, where appropriate
+
+Do not create duplicate screens when equivalent existing ones are functional.
+
+12.4 Accessibility and performance
+
+Support:
+
+- Android safe areas
+- Keyboard appearance and dismissal
+- Small and large screens
+- Scrolling and touch targets
+- Screen readers
+- Reduced motion preferences
+- Adequate text contrast
+- Clear permission explanations
+- Responsive layouts
+
+Avoid unnecessary heavy WebGL, continuous animation, high-frequency polling, and background loops.
+
+Pause animations when appropriate and clean up event listeners, timers, animation frames and media resources.
+
+---
+
+PART 13 — PERSONALIZATION AND SKILLS
+
+13.1 Skill architecture
+
+Use a consistent skill registry for available operations.
+
+Each skill should declare:
+
+- Name and purpose
+- Input/output schema
+- Required permissions
+- Risk level
+- Availability
+- Execution timeout
+- Cancellation support
+- Verification method
+- Failure behavior
+
+Potential skill groups:
+
+- Conversation and knowledge
+- Search and information retrieval
+- Phone controls
+- Notes and memory
+- Reminders
+- Documents and images
+- Calculations
+- Communication drafts
+- Navigation
+- Project assistance
+- Mission orchestration
+- Device status
+
+Register only skills that genuinely exist and can execute.
+
+13.2 Personalization
+
+Allow the user to configure:
+
+- Preferred language
+- Response length
+- Voice
+- Formality
+- Proactivity
+- Quiet hours
+- Confirmation preferences within permitted limits
+- Favorite skills
+- Privacy and memory settings
+
+Personalization must never override mandatory security controls.
+
+---
+
+PART 14 — OFFLINE, NETWORK AND MODEL MANAGEMENT
+
+14.1 Model routing
+
+Audit the existing LLM manager and improve it where necessary.
+
+Support configured model providers and local models only where the actual environment allows them.
+
+Use:
+
+- Provider capability metadata
+- Configurable model selection
+- Appropriate timeout limits
+- Error handling
+- Rate-limit handling
+- Fallback models where configured
+- User-visible provider status
+- Secure credential management
+
+Do not assume that a model provider is available because its name appears in settings.
+
+14.2 Offline mode
+
+When offline, support only capabilities that are actually available locally, such as:
+
+- Local notes
+- Stored preferences
+- Available local reminders
+- Basic calculations
+- Native Android actions
+- An installed local model, if configured
+- Native speech recognition or TTS, if available offline
+
+Explain which functions require a network.
+
+Do not describe cloud AI as offline AI.
+
+14.3 Cost and reliability
+
+Avoid unnecessary model calls.
+
+Prefer deterministic local code for simple calculations, state transitions and permission checks.
+
+Use model calls for tasks that benefit from language understanding, generation or reasoning.
+
+Respect provider rate limits and handle quota exhaustion gracefully.
+
+---
+
+PART 15 — TESTING AND VERIFICATION
+
+15.1 Automated tests
+
+Inspect the existing test suite and extend it.
+
+Cover:
+
+- Intent recognition
+- Context and follow-up resolution
+- Language selection
+- Hindi and Hinglish examples
+- Memory creation, retrieval and deletion
+- Memory consent
+- Capability discovery
+- Tool schema validation
+- Risk classification
+- Confirmation integrity
+- Prompt-injection resistance
+- Mission state transitions
+- Cancellation propagation
+- Retry limits
+- Verification and partial failure
+- Voice lifecycle
+- TTS interruption
+- Permission denial
+- Network loss
+- Offline fallback
+- Persistence across restarts
+- Proactive notification preferences
+- UI responsiveness
+- Regression coverage
+
+Test failure cases as well as successful paths.
+
+Do not weaken or remove meaningful tests merely to obtain a green build.
+
+15.2 Integration testing
+
+Verify real connections between:
+
+- Chat UI and intelligence engine
+- Intelligence engine and tool router
+- Tool router and security policy
+- Security policy and Android bridge
+- Mission planner and persistence
+- Voice pipeline and conversation manager
+- Language settings and actual speech providers
+- Memory retrieval and contextual reasoning
+- Verification results and assistant responses
+
+A mocked test must be labelled as a mocked test.
+
+15.3 Physical-device smoke tests
+
+When a compatible Android device is available, verify:
+
+- Installation and launch
+- Microphone permission
+- Voice input
+- Hindi and English interaction
+- TTS playback
+- Stop and interruption
+- Supported Android settings intents
+- Camera launch
+- Dialer launch
+- SMS and email draft opening
+- Maps launch
+- Volume controls, where supported
+- Battery and connectivity reporting
+- Mission cancellation
+- Memory persistence
+- Accessibility enable/disable, if implemented
+- Background and foreground transitions
+- Network-loss recovery
+- App restart and resumed missions
+
+Record only the tests actually performed.
+
+If a physical device is unavailable, clearly list these tests as pending.
+
+---
+
+PART 16 — BUILD, APK AND RELEASE ENGINEERING
+
+After implementation:
+
+1. Install dependencies using the project's established package manager.
+2. Run formatting, lint and type checks where configured.
+3. Run all relevant automated tests.
+4. Build the production web application.
+5. Synchronize the Android project with Capacitor.
+6. Build the appropriate Android APK using the project's existing build setup.
+7. Inspect the APK's package ID, version, size, signature and target SDK.
+8. Check that required native plugins are included.
+9. Verify the produced APK exists at its actual path.
+10. Calculate the SHA-256 checksum of the final artifact.
+11. Check that any download endpoint serves the same artifact, if such an endpoint exists.
+12. Preserve required signing configuration and release practices.
+
+Do not create fake download endpoints or copy stale APKs over newer artifacts without verification.
+
+Do not claim production readiness from a successful debug build alone.
+
+Distinguish:
+
+- Debug APK
+- Release APK
+- Debug signing
+- Production signing
+- Automated test verification
+- Physical-device verification
+
+Never expose signing secrets or API credentials.
+
+---
+
+PART 17 — IMPLEMENTATION PRIORITY
+
+Work in phases without losing the overall vision.
+
+Phase A — Audit and foundation
+
+- Inventory existing features
+- Trace execution paths
+- Establish regression baseline
+- Identify architectural gaps
+- Fix critical security and correctness problems
+
+Phase B — Intelligence and conversation
+
+- Shared orchestrator
+- Context management
+- Intent and reference resolution
+- Confidence and clarification
+- Structured tool routing
+
+Phase C — Indian multilingual system
+
+- Language registry
+- Language settings
+- Hindi/Hinglish handling
+- Regional language support according to actual providers
+- Voice locale selection and testing
+
+Phase D — Voice experience
+
+- Reliable state lifecycle
+- TTS provider management
+- Interruption and cancellation
+- Permission and network recovery
+- Wake-word verification where supported
+
+Phase E — Memory and world model
+
+- Consent-aware persistent memory
+- Retrieval and correction
+- Project context
+- Notes separation
+- Retention and deletion controls
+
+Phase F — Android skills and security
+
+- Capability registry
+- Native action integration
+- Risk and permission enforcement
+- Action-specific confirmation
+- Execution observation and verification
+
+Phase G — Missions and proactivity
+
+- Durable mission state
+- Bounded multi-step execution
+- Pause, resume and cancellation
+- Recovery and partial completion
+- Opt-in reminders and proactive assistance
+
+Phase H — Multimodal and self-awareness
+
+- User-provided image/document understanding
+- Runtime transparency
+- Evidence-backed self-reporting
+- Compact mission reflections
+
+Phase I — UI, reliability and release
+
+- Premium mobile UX
+- Performance improvements
+- Regression and integration tests
+- APK build and artifact verification
+- Device testing where available
+
+Adapt this sequence to the actual dependencies in the repository. Do not rebuild a correctly implemented module just because it appears later in the plan.
+
+---
+
+PART 18 — NON-NEGOTIABLE RULES
+
+1. Never fake a feature.
+2. Never fabricate test results.
+3. Never claim a task succeeded without sufficient evidence.
+4. Never claim every Indian language is supported without actual verification.
+5. Never claim a premium voice is available unless its provider is configured.
+6. Never place API secrets in frontend code or APK assets.
+7. Never bypass Android permissions.
+8. Never allow free-form LLM output to bypass action-policy enforcement.
+9. Never execute high-risk actions without the required explicit authorization.
+10. Never save credentials in memory.
+11. Never silently record or inspect unrelated user activity.
+12. Never silently enable Accessibility or background listening.
+13. Never claim universal offline capability.
+14. Never claim general cross-app control without real implementation and testing.
+15. Never promise rollback for irreversible actions.
+16. Never remove working functionality without a justified migration.
+17. Never hide failures behind generic success messages.
+18. Never waste resources with unnecessary polling or animations.
+19. Never claim human-like consciousness.
+20. Never stop after writing a plan when repository modification and testing are available.
+21. If a provider, API, device, permission or external dependency blocks implementation, explain the exact blocker and implement the safe available fallback.
+22. Prioritize real functionality, user trust, maintainability and reliability over impressive-looking demonstrations.
+
+---
+
+PART 19 — FINAL DELIVERY REPORT
+
+When implementation is complete, produce a clear report containing:
+
+A. Repository audit
+
+- Existing architecture
+- Important files modified
+- Existing features preserved
+- New modules added
+- Architectural changes and reasons
+
+B. Feature status
+
+For every major capability, report:
+
+- Implemented
+- Improved
+- Already present and verified
+- Partially implemented
+- Blocked
+- Not implemented
+- Requires physical-device verification
+
+C. Indian language matrix
+
+For every advertised language, list actual text, recognition, speech-output and automatic-detection support, along with tested status and provider limitations.
+
+D. Security report
+
+- Permission handling
+- Risk classes
+- Confirmation enforcement
+- Secret handling
+- Memory privacy
+- Prompt-injection protections
+- Remaining risks
+
+E. Test report
+
+- Exact commands executed
+- Actual test totals
+- Pass/fail/skip counts
+- Integration test results
+- Known failures
+- Physical-device tests performed or pending
+
+F. Build report
+
+- Build result
+- APK type
+- Verified artifact path
+- Package ID
+- Version and version code
+- APK size
+- Target and minimum SDK
+- Signing status
+- SHA-256 checksum
+
+G. Limitations
+
+Explicitly state:
+
+- Features requiring external provider credentials
+- Features requiring permissions
+- Features requiring internet
+- Features dependent on Android version
+- Features that remain untested on physical hardware
+- Features that could not be completed
+
+H. Next actions
+
+List only the remaining work that is genuinely necessary.
+
+Do not inflate completion percentages or describe planned features as implemented.
+
+---
+
+FINAL DIRECTIVE
+
+Begin by auditing the existing VAJRA Mobile repository.
+
+Then implement the highest-priority missing capabilities in the existing architecture, validate the actual execution paths, run regression and integration tests, and build the Android APK.
+
+Continue through the available phases without waiting for approval after every ordinary implementation step. Ask for input only when a genuinely important decision, permission, credential, external dependency, or destructive change requires it.
+
+Preserve all working features. Prefer real integrations over simulations. Use safe defaults. Report failures honestly.
+
+The final goal is VAJRA: an intelligent, multilingual, India-first personal AI with JARVIS-inspired conversational behavior, reliable authorized action, useful memory, natural voice, controlled initiative, and evidence-based self-awareness.
+
+Start with the repository audit now. Do not merely return this prompt as your answer—execute the work in the available project environment.

@@ -1,0 +1,6 @@
+{
+  "name": "VAJRA",
+  "description": "Virtual Advanced Intelligence & Response Assistant — Futuristic personal AI control system with holographic HUD, voice interface, and web navigation.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

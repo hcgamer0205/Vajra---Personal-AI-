@@ -1,0 +1,803 @@
+VAJRA MOBILE — ULTIMATE MASTER IMPLEMENTATION PROMPT
+
+Intelligence + Consciousness-Inspired Self-Awareness + Voice Wake + Self-Healing + Adaptive Learning + Android APK + Final Validation
+
+ROLE: Act as a Principal AI Systems Architect, Senior Android/Capacitor Engineer, Voice AI Engineer, Application Security Engineer, QA Lead, and Release Engineer.
+
+PROJECT: VAJRA MOBILE — a voice-first, touch-first, context-aware AI assistant designed for Android, with a futuristic JARVIS-inspired experience.
+
+PRIMARY OBJECTIVE: Audit the existing codebase, preserve all working features, fix verified defects, integrate the requested intelligence and voice capabilities, build a valid Android APK, and provide reproducible evidence of what works and what remains unverified.
+
+Do not merely generate a plan or write a report. Inspect the actual repository and implement the work wherever the environment permits.
+
+---
+
+1. NON-NEGOTIABLE RULES
+
+1. Audit the existing implementation before editing any file.
+2. Reuse existing services, state machines, components, APIs, memory systems, and security controls wherever appropriate.
+3. Do not rewrite working modules just to create a cleaner-looking architecture.
+4. Do not create duplicate voice pipelines, parallel orchestrators, competing memory systems, duplicate tabs, duplicate command executions, or duplicate conversation messages.
+5. Do not break existing behavior while adding new functionality.
+6. Preserve the current mobile-first UI, branding, settings, missions, conversation context, notes, memory, tools, and voice controls.
+7. Keep VAJRA MOBILE separate from unrelated desktop-only development.
+8. Never expose API keys, passwords, authentication tokens, PINs, or private data in logs, memory, test snapshots, or generated reports.
+9. Never bypass confirmation, permissions, authorization, or risk assessment to make a feature appear functional.
+10. Never claim that a test, APK build, physical-device test, wake-word test, or security audit passed unless actual evidence supports that claim.
+11. Do not remove failing tests or weaken assertions merely to obtain a green test suite.
+12. If a requested feature depends on unavailable hardware, services, credentials, or infrastructure, implement a safe interface where possible and clearly report the limitation.
+
+Execution policy: Audit → Plan → Implement → Test → Build → Inspect → Validate → Report.
+
+Make changes in small, coherent steps and run targeted tests after each major change.
+
+---
+
+2. PHASE ZERO — REPOSITORY AUDIT AND BASELINE FREEZE
+
+Inspect the complete existing project, including:
+
+- "package.json" and lockfiles
+- "src/" and all relevant services
+- Voice controller and native Capacitor plugins
+- Android project, manifest, Gradle files, and MainActivity
+- Existing memory, context, mission, and orchestration services
+- Security, confirmation, permission, and action-execution pipeline
+- Self-healing and adaptive-learning implementation
+- Settings and Voice & TTS UI
+- Test files and test scripts
+- Vite configuration and production build
+- Existing APK download implementation, if present
+- CI/CD workflows and build artifacts, if present
+
+The latest project report claims:
+
+- 163/163 automated tests passed.
+- Vite production build passed.
+- Capacitor Android synchronization passed.
+- An Android debug APK was generated and its signature verified.
+- Physical Android acoustic validation is still pending.
+
+Treat these as reported baseline results until independently reproduced.
+
+First, run the existing tests and build. Record the actual baseline. Identify the real source files and actual exported methods instead of assuming that names in previous reports exist.
+
+Create a change plan identifying:
+
+- Existing and reusable components
+- Verified defects
+- Missing features
+- Risky integrations
+- Files that need modification
+- Tests required for each change
+
+Do not start a large rewrite before this audit.
+
+---
+
+3. PHASE ONE — VAJRA INTELLIGENCE CORE
+
+Preserve or establish one shared intelligence architecture:
+
+User Input → Language Detection → Input Normalization → Intent and Context Resolution → Risk Assessment → Orchestrator → Authorized Skill/Action → Execution → Observation → Verification → Response → Optional TTS.
+
+Maintain a single source of truth for:
+
+- Current conversation topic
+- Current intent
+- Last user request
+- Last assistant response
+- Active action
+- Active mission
+- Pending confirmation
+- Recent results
+- Resolved entities
+- Interaction mode
+- Current voice lifecycle
+- Current recovery state
+- Current assistant operating state
+
+Support natural English, Hindi, and Hinglish, including common Indian conversational phrasing.
+
+Examples:
+
+- “Hello Vajra.”
+- “Vajra, YouTube kholo.”
+- “Google pe Python search karo.”
+- “Iska short answer de.”
+- “Pichhle topic pe wapas chalo.”
+- “Ruko.”
+- “Cancel kar.”
+- “Pause kar, baad mein continue karenge.”
+- “Abhi kya kar rahe ho?”
+- “Pichhli baar kya result mila tha?”
+- “Ye galti kyun hui?”
+- “Maine jo preference batayi thi, use update karo.”
+
+Implement confidence-aware intent detection and ambiguity handling. Ask a short clarification when the target, recipient, or requested action is genuinely ambiguous.
+
+Common commands must never be misclassified as memory corrections or preference-learning events.
+
+Keep short-term context bounded and separate from persistent memory. Do not send every conversational follow-up through an unnecessary fresh LLM planning cycle.
+
+---
+
+4. PHASE TWO — CONSCIOUSNESS-INSPIRED SELF-AWARENESS
+
+Build a Self-Awareness and Internal State Model that makes VAJRA more coherent, introspective, context-aware, and transparent.
+
+Important scientific boundary: Do not claim that software has acquired genuine subjective consciousness, sentience, human-like feelings, or independent desires. Implement observable engineering capabilities instead.
+
+4.1 Internal state model
+
+Create or extend one authoritative state model that can represent:
+
+- "idle"
+- "listening"
+- "understanding"
+- "planning"
+- "awaiting_confirmation"
+- "executing"
+- "verifying"
+- "speaking"
+- "paused"
+- "recovering"
+- "error"
+- "backgrounded"
+
+Use the existing naming conventions if equivalent states already exist.
+
+State transitions must be valid, observable, testable, and cleaned up correctly.
+
+4.2 Self-awareness queries
+
+VAJRA should be able to answer questions such as:
+
+- “Vajra, tum abhi kya kar rahe ho?”
+- “Tum kis task par kaam kar rahe ho?”
+- “Kya tum meri baat sun rahe ho?”
+- “Kya tumhe internet access available hai?”
+- “Kya tumhara wake mode enabled hai?”
+- “Tumne ye action complete kiya ya sirf plan banaya?”
+- “Kya verify hua aur kya abhi pending hai?”
+- “Tumhari current limitation kya hai?”
+- “Pichhle task mein kya error aaya tha?”
+- “Kya tumhe meri permission chahiye?”
+
+Answers must come from actual runtime state, permissions, capability checks, mission records, and execution results—not fabricated internal narratives.
+
+4.3 Self-monitoring
+
+Implement lightweight checks for:
+
+- Voice lifecycle inconsistencies
+- Stuck or expired missions
+- Duplicate actions
+- Stale pending confirmations
+- Repeated tool failures
+- Context inconsistencies
+- Resource and timeout violations
+- Recovery loops
+- Unverified completion claims
+
+Use event-driven monitoring where possible. Do not introduce constant polling, unnecessary background AI loops, or excessive battery usage.
+
+4.4 Self-reflection and mistake analysis
+
+After significant tasks, VAJRA may record a bounded internal summary:
+
+1. What was requested?
+2. What action was authorized?
+3. What was attempted?
+4. What was the observed result?
+5. Was success verified?
+6. What failed, if anything?
+7. What safe improvement could prevent recurrence?
+
+Distinguish observed facts from inferred explanations and unknown causes.
+
+Do not allow self-reflection to rewrite its own security rules, install arbitrary code, modify its core policies, or autonomously grant permissions.
+
+4.5 Personality and natural interaction
+
+Create a consistent VAJRA personality:
+
+- Calm, confident, helpful, concise, and natural
+- Comfortable with Hindi, English, and Hinglish
+- Context-aware without repeating the same information
+- Honest about uncertainty and limitations
+- Proactive only when useful and permitted
+- Respectful of interruptions, quiet time, and user privacy
+
+Natural dialogue is a product behavior, not evidence of subjective consciousness.
+
+---
+
+5. PHASE THREE — “HELLO VAJRA” WAKE-WORD SYSTEM
+
+Audit the current Android native voice plugin and TypeScript voice controller before changing the wake-word implementation.
+
+Required wake phrases:
+
+- “Hello Vajra”
+- “Hey Vajra”
+- “Hi Vajra”
+
+Normalize supported variations without triggering repeatedly for the same utterance.
+
+5.1 Wake lifecycle
+
+Implement the following lifecycle:
+
+Disabled/Idle → Wake Detection → Wake Detected → Spoken Acknowledgment → Command Listening → Command Processing → Authorized Action → Result → Idle or Conversation Mode.
+
+Expected interaction:
+
+User: “Hello Vajra.”
+
+VAJRA: “Yes, I'm listening.”
+
+User: “Google pe NASA search karo.”
+
+VAJRA executes the existing authorized search flow exactly once and reports the actual result.
+
+Support a one-shot utterance such as “Hello Vajra, NASA search karo” where the available speech engine can reliably recognize the complete utterance.
+
+5.2 Native Android requirements
+
+- Reuse the existing Capacitor native plugin if suitable.
+- Verify "startWakeWord", "stopWakeWord", "isWakeWordActive", and related methods against actual native and TypeScript implementations.
+- Ensure permission requests are explicit and understandable.
+- Prevent overlapping speech-recognition sessions.
+- Implement timeout, cancellation, duplicate suppression, and lifecycle cleanup.
+- Stop or suspend recognition when the user disables Voice Activation.
+- Handle app pause, resume, backgrounding, screen lock, and activity destruction correctly.
+- Stop TTS or enter an explicit barge-in path when the user interrupts.
+- Respect Android microphone privacy controls and OS restrictions.
+
+Critical: Android's ordinary "SpeechRecognizer" is not automatically a continuous, always-on, local wake-word engine. Do not represent a repeatedly started recognizer as guaranteed low-power, offline, always-on wake detection.
+
+If genuine continuous wake detection is required, evaluate a compatible on-device wake-word engine and integrate it only when the model, licensing, compatibility, resource usage, and device behavior are verified.
+
+If that engine is unavailable, implement a clearly labeled supported mode—such as foreground or session-based wake listening—and document its limitations honestly.
+
+5.3 Privacy and battery
+
+- Voice Activation must default to OFF unless the existing, explicitly configured user preference says otherwise.
+- Show a visible indicator when microphone listening is active.
+- Provide a one-tap stop control.
+- Do not store raw audio by default.
+- Do not upload continuous microphone audio to an LLM.
+- Do not secretly keep a microphone session active.
+- Use bounded retries and resource-aware behavior.
+- Do not promise screen-off or background wake functionality unless it is supported and tested on the actual Android implementation.
+
+---
+
+6. PHASE FOUR — VOICE, TTS, AND CONVERSATION CONTROL
+
+Preserve the existing voice lifecycle and provider-selection architecture.
+
+Voice controls
+
+Support natural-language commands:
+
+- STOP: stop current speech immediately.
+- CANCEL: cancel the current cancellable action or mission.
+- PAUSE: pause a supported task.
+- RESUME/CONTINUE: resume only when the task supports safe resumption.
+- MUTE: stop spoken output without falsely claiming that microphone capture has stopped.
+- LISTEN: enter command-listening mode when permission and lifecycle state allow it.
+
+Cancellation must abort applicable streams, timers, recognition sessions, and action controllers. Do not claim that an external action was reversed when it was already completed.
+
+Voice settings
+
+Implement or preserve:
+
+- System voice
+- Female or male voice options where the platform actually provides suitable voices
+- Voice preview
+- Speech speed
+- Pitch where supported
+- Language preference
+- Hindi, English, and Hinglish behavior
+- TTS availability detection
+- Fallback selection
+- Clear explanation when a requested voice is unavailable
+
+Never fabricate voice inventory or claim a voice's gender based solely on a label that the platform does not reliably provide.
+
+Persist settings safely and test whether they survive application restarts.
+
+Conversation modes
+
+Provide clear, user-controlled modes for:
+
+- Push-to-talk
+- Single command
+- Wake-word activation
+- Continuous conversation, if supported
+- Text-only interaction
+
+Continuous conversation must have an obvious listening state, timeout and stop controls, and correct interruption handling.
+
+---
+
+7. PHASE FIVE — CONTEXT, MEMORY, AND ADAPTIVE LEARNING
+
+Preserve separate systems for short-term conversational context, persistent memory, notes, and learned preferences.
+
+7.1 Bounded context
+
+Maintain relevant recent turns, active missions, resolved references, and task results within explicit limits.
+
+Support contextual follow-ups such as:
+
+- “Isko open karo.”
+- “Iska summary do.”
+- “Ab Hindi mein samjhao.”
+- “Pichhla result dikhao.”
+- “Us task ko cancel karo.”
+
+Resolve references only when there is sufficient confidence. Ask for clarification when multiple candidates are plausible.
+
+7.2 Preference learning
+
+Learn only useful, permitted preferences such as:
+
+- Preferred response language
+- Response verbosity
+- Preferred available TTS voice
+- Speech speed
+- Repeated explicit corrections
+- Approved command shortcuts
+- Approved workflow preferences
+
+Use a pipeline:
+
+Observed Event → Candidate Preference → Confidence Check → Safety Validation → Persistence Decision → User-Visible Result.
+
+Do not interpret an ordinary command as a correction.
+
+Require repeated evidence or explicit user confirmation where appropriate. Never persist a low-confidence guess as an established preference.
+
+7.3 Sensitive-data protection
+
+Never learn, save, or infer passwords, PINs, API keys, authentication tokens, recovery codes, or other credentials as preferences.
+
+Redact sensitive values before logging. Avoid retaining the original secret in the learning event or error message.
+
+Provide controls to:
+
+- View learned preferences
+- Disable learning
+- Delete a selected preference
+- Clear all learned preferences
+- Understand why a preference was saved
+
+Deleting learned preferences must not silently delete unrelated notes or memories.
+
+---
+
+8. PHASE SIX — SELF-HEALING AND SAFE RECOVERY
+
+Implement or verify a bounded recovery engine.
+
+Recovery flow:
+
+Failure Detection → Classification → Safe Diagnosis → Approved Recovery Strategy → Bounded Retry → Post-Recovery Verification → User-Facing Report.
+
+Requirements:
+
+- Exponential backoff with a configurable cap
+- Maximum retry count
+- Overall timeout
+- Cancellation token or equivalent lifecycle control
+- Bounded recovery history
+- Duplicate-recovery suppression
+- Idempotent retry behavior where possible
+- No retries after user cancellation
+- Verification using actual post-recovery state
+- Clear error reporting when recovery fails
+
+Recoverable examples may include transient network failures, expired UI state, interrupted requests, or retry-safe operations.
+
+Do not automatically retry destructive or financially consequential actions without fresh authorization when required.
+
+Do not claim that a mission succeeded simply because a recovery function returned without throwing an exception.
+
+Do not implement unrestricted self-modifying code or autonomous installation of arbitrary fixes.
+
+---
+
+9. PHASE SEVEN — SECURITY, PERMISSIONS, AND ACTION EXECUTION
+
+Preserve this security chain:
+
+LLM Proposal → Typed Action → Risk Classification → Policy Validation → User Permission/Confirmation → Authorized Execution → Observation → Verification → Result.
+
+The LLM must never directly execute privileged operations.
+
+Required safeguards
+
+- Destructive actions require explicit confirmation.
+- The confirmation must describe the actual action and target.
+- Confirmation must not be reusable for a different action or target.
+- Cancellation must invalidate stale pending confirmations.
+- Validate URL schemes and reject dangerous or unsupported protocols.
+- Validate all tool arguments and resource identifiers.
+- Prevent prompt injection from overriding application security rules.
+- Apply least-privilege access to native capabilities.
+- Do not expose unrestricted shell execution or arbitrary file operations.
+- Do not silently simulate unsupported Android or desktop capabilities.
+- Never report an action as complete before execution and verification.
+
+Use the existing "SecurityConfirmModal" and pending-confirmation architecture where appropriate. Avoid duplicate confirmation systems.
+
+---
+
+10. PHASE EIGHT — MOBILE UI AND USER EXPERIENCE
+
+Keep VAJRA mobile-first, compact, accessible, and responsive.
+
+Preserve the established visual identity:
+
+- Deep dark background
+- Crimson and restrained gold accents
+- Subtle futuristic glow
+- Energy Core
+- Conversation canvas
+- Thumb-friendly bottom dock
+- Contextual bottom sheets
+- Compact mission and tool views
+
+Avoid converting the application into a generic dashboard.
+
+Expose meaningful runtime states in the UI:
+
+- Listening
+- Processing
+- Speaking
+- Executing
+- Awaiting confirmation
+- Recovering
+- Paused
+- Error
+
+Add a compact transparency/status panel showing:
+
+- Current operating mode
+- Voice Activation status
+- Microphone permission status
+- Current task or mission
+- Current recovery status
+- Learning enabled/disabled
+- Last verified result
+- Relevant capability limitations
+
+Never display a green success state solely because an action was requested.
+
+Respect safe areas, keyboard resizing, reduced motion, screen orientation, and touch accessibility. Stop unnecessary animations and release resources when the app is hidden.
+
+---
+
+11. PHASE NINE — DIRECT SEARCH, URL LAUNCH, AND ACTION IDEMPOTENCY
+
+Audit and preserve the corrected behavior of:
+
+- "handleLaunchSearchDirect"
+- "handleLaunchUrlDirect"
+
+Use the actual functions present in the repository; do not assume the names exist.
+
+Ensure that a direct search or URL launch:
+
+- Opens the intended destination once
+- Does not create duplicate tabs
+- Does not trigger a redundant LLM turn
+- Does not insert unwanted assistant messages
+- Does not execute twice through both voice and keyboard paths
+- Updates conversation context correctly
+- Produces a result that can be verified
+
+All input paths—voice, keyboard, suggestions, and contextual follow-ups—must share the appropriate authorized execution path.
+
+Keep Quick Directions absent unless the user explicitly requests its restoration.
+
+---
+
+12. PHASE TEN — ANDROID APK AND RELEASE PIPELINE
+
+Inspect the real Android project and existing build configuration.
+
+Verify:
+
+- Capacitor configuration
+- Android package/application ID
+- App version and version code
+- Minimum and target SDK
+- Manifest permissions
+- Native plugin registration
+- Bundled production web assets
+- Gradle wrapper and Android toolchain
+- Release/debug signing configuration
+- APK output path
+- APK download route and in-app download actions
+
+The latest report lists these expected debug artifact details:
+
+- Application ID: "com.vajra.mobile"
+- Version: "1.0"
+- Version code: "1"
+- Target SDK: API 36
+- Minimum SDK: API 24
+- Expected APK path: "android/app/build/outputs/apk/debug/app-debug.apk"
+- Reported size: "5,202,479" bytes
+- Previously reported SHA-256: "560532ec6e64d62595f31c4d63f8f3fc5265043e4405927689a8e64f4811de23"
+
+These are reference values, not guaranteed values for a new build.
+
+Build procedure
+
+1. Run the complete test suite.
+2. Run the production web build.
+3. Synchronize Capacitor assets.
+4. Build the Android debug APK using the repository's Gradle wrapper.
+5. Confirm the actual APK exists and is non-empty.
+6. Inspect the package ID and version from the built artifact.
+7. Verify the APK signature using the Android SDK's verification tooling.
+8. Compute the actual SHA-256 checksum.
+9. Record the actual artifact size.
+10. Install on a connected device if one is available.
+11. Launch the app and inspect runtime logs for critical failures.
+12. Re-run relevant tests after any build-related fix.
+
+Do not report the reference hash as the hash of a newly generated APK unless they actually match.
+
+APK download experience
+
+Verify that each promised download method really works:
+
+- Direct download URL
+- Core Settings → Android Release & APK
+- Mobile Tools Sheet → Download Android APK
+
+A visible button is not proof of a working download.
+
+Test the route using the actual development/production server configuration. Confirm that it serves the generated APK bytes with an appropriate content type and filename.
+
+Never invent a public URL. If the route does not work, fix it or clearly report the limitation.
+
+Keep debug and production release artifacts distinct. Do not describe a debug-key APK as a production-signed release.
+
+---
+
+13. PHASE ELEVEN — AUTOMATED TESTING
+
+Preserve all existing tests and add focused coverage for the new or modified behavior.
+
+The latest report claims 163 passing tests. Reproduce the actual count and result; do not assume the count remains unchanged.
+
+Test categories:
+
+Intelligence and context
+
+- English, Hindi, and Hinglish commands
+- Topic continuity
+- Explicit topic switching
+- Follow-up reference resolution
+- Ambiguous contact or recipient requests
+- Bounded memory growth
+
+Voice
+
+- Wake activation state
+- Wake-word variations
+- Duplicate wake suppression
+- One-shot commands
+- Listening timeout
+- Barge-in
+- STOP/CANCEL/PAUSE/RESUME
+- Voice selection and fallback
+- Speed/pitch persistence
+- TTS and recognition errors
+- Permission denial
+- Lifecycle cleanup
+
+Self-awareness
+
+- Accurate current-state answers
+- Correct active-task reporting
+- Honest capability reporting
+- Pending-confirmation reporting
+- Verified versus unverified results
+- No invented task completion
+- Invalid state-transition prevention
+
+Self-healing
+
+- Retry limits
+- Exponential backoff
+- Cancellation
+- Lifecycle cleanup
+- Recovery deduplication
+- Post-recovery verification
+- Failure reporting
+
+Adaptive learning
+
+- High-confidence preference updates
+- Rejection of common commands as false corrections
+- Sensitive-data rejection and redaction
+- Learning disabled
+- Preference deletion
+- Persistence across restart
+
+Security
+
+- Destructive-action confirmation
+- Stale confirmation rejection
+- Target mismatch rejection
+- Unauthorized execution rejection
+- Dangerous URL protocol rejection
+- Prompt-injection resistance at the policy boundary
+
+Regression
+
+- Search/URL idempotency
+- No duplicate tabs
+- No duplicate assistant messages
+- No redundant LLM calls
+- Existing notes and memory behavior
+- Existing mobile settings and tools
+- Quick Directions remains absent
+
+Add tests for every newly introduced bug fix.
+
+Use mocks for deterministic unit tests, but clearly separate mocks from native Android and real-device verification.
+
+---
+
+14. PHASE TWELVE — REAL ANDROID DEVICE VALIDATION
+
+If a physical Android device is available, test the actual built APK.
+
+Checklist:
+
+- APK installs successfully
+- App launches without a fatal crash
+- Microphone permission can be granted and denied safely
+- Push-to-talk works
+- Wake activation behaves according to the implemented mode
+- “Hello Vajra” produces the expected response
+- A spoken search or URL command executes once
+- TTS works with the available system voice
+- Voice settings persist correctly
+- STOP interrupts speech
+- PAUSE and RESUME respect task capability
+- Backgrounding and foregrounding clean up correctly
+- Screen lock behavior matches the documented wake mode
+- Network failures are handled safely
+- Confirmation UI blocks unauthorized destructive execution
+- No duplicate tabs or duplicate command execution occur
+- Battery and microphone behavior are reasonable for the implemented mode
+
+Record Android version, device model where available, application version, test outcome, and relevant logs without sensitive user data.
+
+If no device is attached, mark these tests NOT VERIFIED — PHYSICAL DEVICE REQUIRED.
+
+Do not equate a successful build or mocked test with acoustic wake-word verification.
+
+---
+
+15. IMPLEMENTATION PRIORITY
+
+Work in this order:
+
+P0 — Preserve and verify
+
+- Existing tests
+- Build pipeline
+- Security boundaries
+- Search/URL idempotency
+- Existing voice lifecycle
+- APK reproducibility
+
+P1 — Reliability
+
+- Native plugin lifecycle
+- Cancellation
+- Recovery limits
+- Runtime state consistency
+- Android permission handling
+
+P2 — Intelligence
+
+- Self-awareness state model
+- Context-aware conversation
+- Honest introspection
+- Adaptive preferences
+- Self-reflection and verified task reports
+
+P3 — Voice experience
+
+- Wake-word reliability
+- TTS selection and fallback
+- Barge-in
+- Conversation modes
+- Privacy and battery behavior
+
+P4 — Release readiness
+
+- Download route
+- APK metadata and signature
+- Device installation
+- Real-device smoke tests
+- Final documentation
+
+Do not introduce large new infrastructure or heavy dependencies unless they are necessary and justified.
+
+---
+
+16. REQUIRED FINAL REPORT
+
+After implementation, provide a concise but evidence-based report containing:
+
+A. Implementation
+
+- Features implemented
+- Existing components reused
+- Files/modules modified
+- Architecture changes
+- Known limitations
+
+B. Tests
+
+- Exact test command
+- Total tests discovered
+- Passed, failed, skipped
+- Build result
+- Regression result
+
+C. APK
+
+- Exact artifact path
+- File size
+- SHA-256
+- Application ID
+- Version and version code
+- SDK details
+- Signature verification result
+- Download route verification result
+
+D. Device testing
+
+Separate these statuses clearly:
+
+- Automated tests
+- Native Android build
+- APK metadata/signature verification
+- Emulator testing
+- Physical installation
+- Microphone and TTS testing
+- Acoustic wake-word testing
+- Background/screen-lock behavior
+
+E. Remaining work
+
+List only the actual outstanding items and the evidence needed to close them.
+
+Use "PASS", "FAIL", "NOT RUN", or "NOT VERIFIED" as appropriate.
+
+Never fabricate command output, checksums, test counts, device results, or success claims.
+
+---
+
+FINAL DIRECTIVE
+
+Build VAJRA MOBILE into a reliable, context-aware, self-monitoring, voice-first assistant with a consistent personality, useful memory, safe adaptation, bounded self-healing, accurate self-reporting, and a genuinely tested Android experience.
+
+Treat “consciousness” as a design aspiration expressed through observable capabilities: awareness of current state, context, tasks, limitations, errors, and verified outcomes—not as an unsupported claim of sentience.
+
+Start by auditing the real repository. Then implement, test, build, verify, and report. Do not stop after producing a plan.

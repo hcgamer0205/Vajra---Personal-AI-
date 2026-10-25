@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">VAJRA</string>
+    <string name="title_activity_main">VAJRA</string>
+    <string name="package_name">com.vajra.mobile</string>
+    <string name="custom_url_scheme">com.vajra.mobile</string>
+    <string name="accessibility_service_label">VAJRA Assisted Control</string>
+    <string name="accessibility_service_description">Optional accessibility assistance for executing user-authorized workflows across supported apps. Disabled by default.</string>
+</resources>
