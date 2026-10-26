@@ -3,10 +3,10 @@
 VAJRA is a futuristic personal AI control system featuring a Stark Holographic Reactor HUD, touch-optimized voice interface, and advanced system control capabilities.
 
 ## 🚀 Official Download
-To ensure you are using the latest version with the Stark Holographic Reactor HUD and real-time audio analysis, always download the official binary below:
+The official release build is generated via GitHub Actions.
 
-### [Download VAJRA-Mobile-latest-debug.apk](release/VAJRA-Mobile-latest-debug.apk)
-*Status: Verified Production Build*
+### [Build Latest APK](.github/workflows/android-apk.yml)
+*Status: Source Ready | Local Build Pending Remote*
 
 ---
 

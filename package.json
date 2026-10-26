@@ -16,9 +16,11 @@
     "preview": "vite preview",
     "clean": "rm -rf dist dist-electron dist_electron server.js",
     "lint": "tsc --noEmit",
-    "test": "tsx src/services/tests/runContextTests.ts"
+    "test": "tsx src/services/tests/runContextTests.ts",
+    "assets": "capacitor-assets generate --android"
   },
   "dependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/core": "^8.5.2",
     "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.1.14",
