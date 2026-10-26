@@ -46,14 +46,27 @@ export interface WakeDetectionResult {
  */
 export function parseWakePhrase(transcript: string): WakeDetectionResult {
   if (!transcript) return { isWakePhrase: false };
+  
+  // Clean transcript: remove initial/trailing non-alphanumeric noise, but preserve internal spaces
   const clean = transcript.trim();
-  // Match "hello vajra", "hey vajra", "hi vajra", "hello jarvis", "hey jarvis", "jarvis" (case-insensitive)
-  const match = clean.match(/^(?:hello|hey|hi|ok)?\s*(?:vajra|jarvis)\b[\s,.:;!-]*(.*)$/i);
+  
+  /**
+   * REFINED WAKE WORD REGEX:
+   * 1. Optional Prefix: (hello|hey|hi|ok|acha|suno|oye|vaire) followed by optional punctuation
+   * 2. Core Name: (vajra|jarvis)
+   * 3. Word Boundary check \b
+   * 4. Captured Command: everything else
+   */
+  const regex = /^(?:hello|hey|hi|ok|acha|suno|oye|vaire)?[\s,.:;!-]*(?:vajra|jarvis)\b[\s,.:;!-]*(.*)$/i;
+  const match = clean.match(regex);
+  
   if (match) {
-    const prefix = clean.slice(0, clean.length - (match[1]?.length || 0)).trim().replace(/[\s,.:;!-]+$/, '');
+    // Determine canonical matched phrase for UI feedback
+    const lowerClean = clean.toLowerCase();
     let canonical: 'Hello Vajra' | 'Hey Vajra' | 'Hi Vajra' = 'Hello Vajra';
-    if (/^hey/i.test(prefix)) canonical = 'Hey Vajra';
-    else if (/^hi/i.test(prefix)) canonical = 'Hi Vajra';
+    
+    if (lowerClean.startsWith('hey')) canonical = 'Hey Vajra';
+    else if (lowerClean.startsWith('hi')) canonical = 'Hi Vajra';
 
     const remaining = (match[1] || '').trim();
     return {
@@ -62,6 +75,7 @@ export function parseWakePhrase(transcript: string): WakeDetectionResult {
       remainingCommand: remaining.length > 0 ? remaining : undefined,
     };
   }
+  
   return { isWakePhrase: false };
 }
 

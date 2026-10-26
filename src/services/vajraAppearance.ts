@@ -197,15 +197,31 @@ const STORAGE_KEY_APPEARANCE = 'vajra_appearance_v1';
 export function loadAppearanceConfig(): VajraAppearanceConfig {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_APPEARANCE);
+    const userConfigRaw = localStorage.getItem('vajra_user_config_v1');
+    
+    let baseConfig = { ...DEFAULT_APPEARANCE_CONFIG };
+
+    // Priority 1: Direct appearance settings
     if (raw) {
       const parsed = JSON.parse(raw);
-      return {
-        coreTheme: parsed.coreTheme || DEFAULT_APPEARANCE_CONFIG.coreTheme,
-        customCoreColor: parsed.customCoreColor || DEFAULT_APPEARANCE_CONFIG.customCoreColor,
-        uiAccentTheme: parsed.uiAccentTheme || DEFAULT_APPEARANCE_CONFIG.uiAccentTheme,
-        customUiColor: parsed.customUiColor || DEFAULT_APPEARANCE_CONFIG.customUiColor,
+      baseConfig = {
+        coreTheme: parsed.coreTheme || baseConfig.coreTheme,
+        customCoreColor: parsed.customCoreColor || baseConfig.customCoreColor,
+        uiAccentTheme: parsed.uiAccentTheme || baseConfig.uiAccentTheme,
+        customUiColor: parsed.customUiColor || baseConfig.customUiColor,
       };
+    } 
+    
+    // Priority 2: Sync with userConfig if theme was set there during onboarding
+    if (userConfigRaw) {
+      const userConfig = JSON.parse(userConfigRaw);
+      if (userConfig.theme && CORE_THEMES[userConfig.theme as CoreThemeId] && !raw) {
+        baseConfig.coreTheme = userConfig.theme as CoreThemeId;
+        baseConfig.uiAccentTheme = getMatchingUiAccentForCoreTheme(userConfig.theme as CoreThemeId);
+      }
     }
+    
+    return baseConfig;
   } catch (err) {
     console.warn('VAJRA: Could not load appearance settings from localStorage:', err);
   }

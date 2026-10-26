@@ -78,13 +78,18 @@ export const DEFAULT_SYSTEM_INSTRUCTION =
   '```\n' +
   'Security & Authorization: Destructive actions (like DELETE_FILE) strictly require explicit user authorization before execution.';
 
-// Lazy-initialize Gemini client to avoid premature crashes if key isn't loaded immediately
+// Initialize Gemini client globally to reuse connection and reduce overhead
+let aiClient: GoogleGenAI | null = null;
+
 function getGeminiClient(): GoogleGenAI {
+  if (aiClient) return aiClient;
+  
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     throw new Error('GEMINI_API_KEY environment variable is not configured. Please add it in the Settings > Secrets panel.');
   }
-  return new GoogleGenAI({
+  
+  aiClient = new GoogleGenAI({
     apiKey,
     httpOptions: {
       headers: {
@@ -92,6 +97,8 @@ function getGeminiClient(): GoogleGenAI {
       },
     },
   });
+  
+  return aiClient;
 }
 
 // Helper to determine if an error is a transient high-demand / 503 / 429 overload
@@ -240,12 +247,12 @@ app.post('/api/chat', async (req: Request, res: Response) => {
 
   let streamSucceeded = false;
   let lastError: any = null;
+  const ai = getGeminiClient();
 
   for (const candidate of candidateModels) {
     if (clientDisconnected) break;
 
     try {
-      const ai = getGeminiClient();
       console.log(`[VAJRA Core] Initializing neural stream with model: ${candidate}`);
 
       const responseStream = await ai.models.generateContentStream({

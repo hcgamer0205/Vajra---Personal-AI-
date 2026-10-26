@@ -358,9 +358,12 @@ export function resolveContextualIntent(
   snapshot?: Partial<RuntimeStateSnapshot>
 ): ContextResolutionResult {
   const trimmed = userText.trim();
+  if (!trimmed) return { isContextualFollowUp: false, confidence: 'HIGH_CONFIDENCE' };
+  
   const lower = trimmed.toLowerCase();
 
-  // 0. Natural Voice Control Intercept (Stop, Cancel, Pause, Resume)
+  // 0. FAST PATH: Natural Voice Control Intercept (Stop, Cancel, Pause, Resume)
+  // Check for exact matches or very short strings first to bypass heavy regex
   const voiceControl = detectVoiceControl(trimmed);
   if (voiceControl) {
     let syntheticResponse = 'Operation stopped.';
@@ -412,112 +415,152 @@ export function resolveContextualIntent(
     };
   }
 
-  // 0.1 Self-Awareness & Grounded Introspection Queries
-  const selfAwarenessType = detectSelfAwarenessQuery(trimmed);
-  if (selfAwarenessType) {
-    const defaultSnapshot: RuntimeStateSnapshot = {
-      currentState: (context.actionState === 'WAITING_FOR_CONFIRMATION'
-        ? 'awaiting_confirmation'
-        : context.actionState === 'EXECUTING'
-        ? 'executing'
-        : context.actionState === 'PLANNING'
-        ? 'planning'
-        : context.actionState === 'VERIFYING'
-        ? 'verifying'
-        : 'idle') as any,
-      context,
-      isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
-      selectedModel: 'gemini-3.1-flash-lite',
-      isMuted: false,
-      isVoiceActivationEnabled: true,
-      voiceMode: 'WAKE_STANDBY',
-      micPermission: 'GRANTED',
-      isNativeAndroid: false,
-      recentSelfHealEvents: [],
-      activeMission: context.activeMission,
-      pendingAction: context.pendingConfirmation?.action || context.activeAction,
-      lastVerifiedResult: context.recentResult,
-      ...snapshot,
-    };
+  // 0.1 Self-Awareness & Protocols (Short-circuit keywords)
+  if (lower.includes('protocol') || lower.includes('diagnostic') || lower.includes('status') || lower.includes('who are you') || lower.includes('kaun ho')) {
+    const selfAwarenessType = detectSelfAwarenessQuery(trimmed);
+    if (selfAwarenessType) {
+      const defaultSnapshot: RuntimeStateSnapshot = {
+        currentState: (context.actionState === 'WAITING_FOR_CONFIRMATION'
+          ? 'awaiting_confirmation'
+          : context.actionState === 'EXECUTING'
+          ? 'executing'
+          : context.actionState === 'PLANNING'
+          ? 'planning'
+          : context.actionState === 'VERIFYING'
+          ? 'verifying'
+          : 'idle') as any,
+        context,
+        isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+        selectedModel: 'gemini-3.1-flash-lite',
+        isMuted: false,
+        isVoiceActivationEnabled: true,
+        voiceMode: 'WAKE_STANDBY',
+        micPermission: 'GRANTED',
+        isNativeAndroid: false,
+        recentSelfHealEvents: [],
+        activeMission: context.activeMission,
+        pendingAction: context.pendingConfirmation?.action || context.activeAction,
+        lastVerifiedResult: context.recentResult,
+        ...snapshot,
+      };
 
-    const answer = resolveSelfAwarenessQuery(selfAwarenessType, defaultSnapshot);
-    return {
-      isContextualFollowUp: true,
-      confidence: 'HIGH_CONFIDENCE',
-      syntheticResponse: answer,
-    };
+      const answer = resolveSelfAwarenessQuery(selfAwarenessType, defaultSnapshot);
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        syntheticResponse: answer,
+      };
+    }
+
+    // Protocol checks
+    if (lower.includes('house party protocol')) {
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        syntheticResponse: '### 🚀 House Party Protocol Activated\n\nCoordinated multi-system standby engaged, Sir:\n• **Language Matrix**: 20 Indian dialects & English primed\n• **Tactical Memory Fabric**: Personal world model online\n• **Android Intent Bridge**: Hardware controls connected\n• **Multimodal Scanner**: Optical document analysis ready\n\n*All auxiliary subsystems standing by for your directive, Sir.*',
+        updatedTopic: 'protocols',
+      };
+    }
+    if (lower.includes('clean slate protocol')) {
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        syntheticResponse: '### ⚡ Clean Slate Protocol Initialized\n\nTransient session telemetry, temporary caches, and unpinned logs have been cleared, Sir. Energy core and neural bridges returned to pure baseline.',
+        updatedTopic: 'protocols',
+      };
+    }
+    if (lower.includes('barn door protocol') || lower === 'lock down' || lower === 'lockdown') {
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        syntheticResponse: '### 🛡️ Barn Door Protocol Engaged\n\nExternal communications quarantined. Local On-Device Neural Engine forced active. All telemetry isolated to physical device boundaries, Sir.',
+        updatedTopic: 'security',
+      };
+    }
+    if (lower.includes('veronica') || lower.includes('diagnostic') || lower === 'status report') {
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        syntheticResponse: '### 🔬 Veronica Armor & Subsystem Diagnostic\n\n• **Arc Reactor Core**: 100% Operational (Nominal frequency)\n• **Acoustic Sensors**: Wake Word & Speech-to-Text active\n• **Power Telemetry**: Battery voltage stable & thermal dissipation optimal\n• **Neural Stream**: Gemini Low-Latency Engine connected\n• **Security Sandbox**: Level-4 Permission Boundary verified\n\n*All systems green, Sir. Standing by for flight coordinates or tasks.*',
+        updatedTopic: 'diagnostics',
+      };
+    }
   }
 
-  // 0.2 Stark Industries & J.A.R.V.I.S. Tactical Protocol Directives
-  if (lower.includes('house party protocol')) {
-    return {
-      isContextualFollowUp: true,
-      confidence: 'HIGH_CONFIDENCE',
-      syntheticResponse:
-        '### 🚀 House Party Protocol Activated\n\n' +
-        'Coordinated multi-system standby engaged, Sir:\n' +
-        '• **Language Matrix**: 20 Indian dialects & English primed\n' +
-        '• **Tactical Memory Fabric**: Personal world model online\n' +
-        '• **Android Intent Bridge**: Hardware controls connected\n' +
-        '• **Multimodal Scanner**: Optical document analysis ready\n\n' +
-        '*All auxiliary subsystems standing by for your directive, Sir.*',
-      updatedTopic: 'protocols',
-    };
+  // 0.2 Common Directives Fast Path (Short-circuit common hardware/intent actions)
+  if (lower.startsWith('open ') || lower.startsWith('kholo ') || lower.startsWith('chalu karo ')) {
+    const appQuery = lower.replace(/^(open |kholo |chalu karo )/, '').trim();
+    
+    // Settings fast path
+    if (appQuery === 'settings' || appQuery === 'wifi' || appQuery === 'bluetooth' || appQuery === 'display') {
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        resolvedAction: {
+          id: `fast-settings-${Date.now()}`,
+          type: 'OPEN_SETTINGS',
+          appName: appQuery === 'settings' ? 'general' : appQuery,
+          title: `Open ${appQuery.charAt(0).toUpperCase() + appQuery.slice(1)} Settings`,
+          status: 'pending'
+        },
+        syntheticResponse: `Right away, Sir. Opening ${appQuery} settings.`
+      };
+    }
+    
+    // Calculator fast path
+    if (appQuery === 'calculator' || appQuery === 'calc') {
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        resolvedAction: {
+          id: `fast-calc-${Date.now()}`,
+          type: 'OPEN_APP',
+          appName: 'Calculator',
+          title: 'Open Calculator',
+          status: 'pending'
+        },
+        syntheticResponse: 'Launching Calculator, Sir.'
+      };
+    }
+
+    // Camera fast path
+    if (appQuery === 'camera' || appQuery === 'photo') {
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        resolvedAction: {
+          id: `fast-cam-${Date.now()}`,
+          type: 'OPEN_CAMERA',
+          title: 'Open Camera',
+          status: 'pending'
+        },
+        syntheticResponse: 'Initializing camera modules, Sir.'
+      };
+    }
   }
 
-  if (lower.includes('clean slate protocol')) {
-    return {
-      isContextualFollowUp: true,
-      confidence: 'HIGH_CONFIDENCE',
-      syntheticResponse:
-        '### ⚡ Clean Slate Protocol Initialized\n\n' +
-        'Transient session telemetry, temporary caches, and unpinned logs have been cleared, Sir. ' +
-        'Energy core and neural bridges returned to pure baseline.',
-      updatedTopic: 'protocols',
-    };
-  }
-
-  if (lower.includes('barn door protocol') || lower === 'lock down' || lower === 'lockdown') {
-    return {
-      isContextualFollowUp: true,
-      confidence: 'HIGH_CONFIDENCE',
-      syntheticResponse:
-        '### 🛡️ Barn Door Protocol Engaged\n\n' +
-        'External communications quarantined. Local On-Device Neural Engine forced active. ' +
-        'All telemetry isolated to physical device boundaries, Sir.',
-      updatedTopic: 'security',
-    };
-  }
-
-  if (
-    lower.includes('veronica') ||
-    lower.includes('armor diagnostic') ||
-    lower.includes('system diagnostic') ||
-    lower.includes('run diagnostic') ||
-    lower === 'status report' ||
-    lower === 'jarvis status'
-  ) {
-    return {
-      isContextualFollowUp: true,
-      confidence: 'HIGH_CONFIDENCE',
-      syntheticResponse:
-        '### 🔬 Veronica Armor & Subsystem Diagnostic\n\n' +
-        '• **Arc Reactor Core**: 100% Operational (Nominal frequency)\n' +
-        '• **Acoustic Sensors**: Wake Word & Speech-to-Text active\n' +
-        '• **Power Telemetry**: Battery voltage stable & thermal dissipation optimal\n' +
-        '• **Neural Stream**: Gemini Low-Latency Engine connected\n' +
-        '• **Security Sandbox**: Level-4 Permission Boundary verified\n\n' +
-        '*All systems green, Sir. Standing by for flight coordinates or tasks.*',
-      updatedTopic: 'diagnostics',
-    };
+  // 0.3 Web Search Fast Path
+  if (lower.startsWith('search for ') || lower.startsWith('google ') || lower.startsWith('find ')) {
+    const query = lower.replace(/^(search for |google |find )/, '').trim();
+    if (query.length > 2) {
+      return {
+        isContextualFollowUp: true,
+        confidence: 'HIGH_CONFIDENCE',
+        resolvedAction: {
+          id: `fast-search-${Date.now()}`,
+          type: 'SEARCH_WEB',
+          query: query,
+          title: `Search: "${query}"`,
+          url: createSafeGoogleSearchUrl(query),
+          status: 'pending'
+        },
+        syntheticResponse: `Searching the data matrix for "${query}", Sir.`
+      };
+    }
   }
 
   // 1. Check for Explicit Topic Switch
   if (isExplicitTopicSwitch(trimmed)) {
-    // Strip the switch marker and let downstream recognize the fresh topic
-    const cleaned = trimmed
-      .replace(/^(?:waise|by the way|anyway|leave that|chhodo|bhool jao|forget that|instead|dusri baat|acha suno)\s*[,:]?\s*/i, '')
-      .trim();
     return {
       isContextualFollowUp: false,
       confidence: 'HIGH_CONFIDENCE',
@@ -526,381 +569,89 @@ export function resolveContextualIntent(
     };
   }
 
-  // 2. Ambiguous Communication Guard (Calls / Emails with missing targets)
-  // e.g. "Call Rahul", "Phone lagao Priya", "Rahul ko call karo"
-  const bareCallMatch = trimmed.match(
-    /^(?:call|phone lagao|dial karo|phone karo|call karo)\s+([A-Za-z\s]+?)(?:\s+ko)?$/i
-  );
-  if (bareCallMatch && !/\d{3,}/.test(trimmed)) {
-    const personName = bareCallMatch[1].replace(/\s+(?:ko|karo)$/i, '').trim();
-    if (personName.length > 1 && !personName.toLowerCase().startsWith('emergency')) {
+  // 2. Communication & Math Guards (Pattern matching)
+  // Optimization: Only run if keywords present
+  if (lower.includes('call') || lower.includes('phone') || lower.includes('lagao') || lower.includes('mail') || lower.includes('email')) {
+    const bareCallMatch = trimmed.match(/^(?:call|phone lagao|dial karo|phone karo|call karo)\s+([A-Za-z\s]+?)(?:\s+ko)?$/i);
+    if (bareCallMatch && !/\d{3,}/.test(trimmed)) {
+      const personName = bareCallMatch[1].replace(/\s+(?:ko|karo)$/i, '').trim();
+      if (personName.length > 1 && !personName.toLowerCase().startsWith('emergency')) {
+        return {
+          isContextualFollowUp: true,
+          confidence: 'MEDIUM_CONFIDENCE',
+          syntheticResponse: `Kaunse ${personName} ko call karna hai? Kripya phone number specify karein.`,
+        };
+      }
+    }
+
+    const bareMailMatch = trimmed.match(/^(?:mail bhejo|email karo|send email to|send mail to)\s+([A-Za-z\s]+?)(?:\s+ko)?$/i);
+    if (bareMailMatch && !trimmed.includes('@')) {
+      const personName = bareMailMatch[1].replace(/\s+(?:ko|karo)$/i, '').trim();
+      if (personName.length > 1) {
+        return {
+          isContextualFollowUp: true,
+          confidence: 'MEDIUM_CONFIDENCE',
+          syntheticResponse: `${personName} ka email address kya hai? Kripya email ID specify karein.`,
+        };
+      }
+    }
+  }
+
+  // 3. Math & Calculator
+  if (/[0-9%]/.test(trimmed) || lower.includes('plus') || lower.includes('minus') || lower.includes('multiply') || lower.includes('divide')) {
+    const mathValue = evaluateSafeMath(trimmed);
+    if (mathValue !== null && (context.currentTopic === 'calculator' || context.recentEntities.lastApp === 'Calculator' || lower.includes('hisab') || lower.includes('percent'))) {
+      const formattedResult = `${mathValue}`;
       return {
         isContextualFollowUp: true,
-        confidence: 'MEDIUM_CONFIDENCE',
-        clarificationPrompt: `Kaunse ${personName} ko call karna hai? Kripya phone number specify karein.`,
-        syntheticResponse: `Kaunse ${personName} ko call karna hai? Kripya phone number specify karein.`,
+        confidence: 'HIGH_CONFIDENCE',
+        syntheticResponse: `### 🧮 VAJRA Math Engine\n\n**Expression**: \`${trimmed}\`\n**Result**: **\`${formattedResult}\`**\n\n*Computed locally with mathematical precision.*`,
+        updatedTopic: 'calculator',
+        updatedEntities: { ...context.recentEntities, lastMathExpression: trimmed, lastMathResult: formattedResult, lastApp: 'Calculator' },
+        proactiveSuggestion: `Want me to save this result (${formattedResult}) to your Scratchpad note?`,
       };
     }
   }
 
-  // e.g. "Mail bhejo Rahul", "Send email to Rahul" without email address
-  const bareMailMatch = trimmed.match(
-    /^(?:mail bhejo|email karo|send email to|send mail to)\s+([A-Za-z\s]+?)(?:\s+ko)?$/i
-  );
-  if (bareMailMatch && !trimmed.includes('@')) {
-    const personName = bareMailMatch[1].replace(/\s+(?:ko|karo)$/i, '').trim();
-    if (personName.length > 1) {
-      return {
-        isContextualFollowUp: true,
-        confidence: 'MEDIUM_CONFIDENCE',
-        clarificationPrompt: `${personName} ka email address kya hai? Kripya email ID specify karein.`,
-        syntheticResponse: `${personName} ka email address kya hai? Kripya email ID specify karein.`,
-      };
+  // 4. Reference Pronouns & Sequential Search (Context dependent)
+  if (context.currentTopic === 'search' || context.recentEntities.lastSearchQuery || context.activeAction) {
+    // Ordinals
+    const isPehla = lower.includes('pehla') || lower.includes('first');
+    const isDoosra = lower.includes('doosra') || lower.includes('second') || lower.includes('dusra');
+    if (isPehla || isDoosra) {
+      const targetIndex = isPehla ? 0 : 1;
+      const missionStep = context.activeMission?.steps?.[targetIndex];
+      if (missionStep && missionStep.action) {
+        return {
+          isContextualFollowUp: true,
+          resolvedAction: missionStep.action,
+          confidence: 'HIGH_CONFIDENCE',
+          syntheticResponse: `Opening ${isPehla ? 'first' : 'second'} item: ${missionStep.description}.`,
+        };
+      }
     }
-  }
 
-  // 3. Multi-Step Compound Directives Planning (Phase 8)
-  // e.g. "Google pe Python beginner tutorial search karo aur first useful result ka short summary do."
-  // or "Weather check karo aur Delhi ka map dikhao."
-  const isSearchAndSummaryMatch = trimmed.match(
-    /(?:google|search)\s+(?:pe|par|for)?\s*(.+?)\s+(?:search\s+karo|khojo|dhoondo)\s+aur\s+[\s\S]*?(?:summary|short\s+summary|batao|explain)/i
-  );
-  if (isSearchAndSummaryMatch) {
-    const topic = isSearchAndSummaryMatch[1].replace(/["']/g, '').trim();
-    const searchAction: VajraAction = {
-      id: `act-mission-step1-${Date.now()}`,
-      type: 'SEARCH_WEB',
-      title: `Search: "${topic}"`,
-      url: createSafeGoogleSearchUrl(topic),
-      query: topic,
-      description: `Execute Google search for "${topic}".`,
-      status: 'pending',
-    };
-
-    const mission: VajraMission = {
-      id: `mis-${Date.now()}`,
-      title: `Research & Summarize: "${topic}"`,
-      steps: [
-        {
-          id: 'step-1',
-          order: 1,
-          description: `Search Google for ${topic}`,
-          action: searchAction,
+    // "iska", "usko", "wahi"
+    const iskaMatch = trimmed.match(/^(?:ab\s+)?(?:iska|ispe|iske|usko|uske|iska\s+ek|uska|yeh|woh)\s+([a-zA-Z0-9_\s+#]+?)(?:\s+(?:search|kholo|dikhao))?$/i);
+    if (iskaMatch) {
+      const parentEntity = context.recentEntities.lastSearchQuery || context.recentEntities.lastTopicEntity || '';
+      const subAttribute = iskaMatch[1].trim();
+      if (parentEntity && subAttribute && !['kholo', 'dhoondo', 'dikhao', 'search'].includes(subAttribute.toLowerCase())) {
+        const combinedQuery = `${parentEntity} ${subAttribute}`;
+        const action: VajraAction = {
+          id: `act-ref-attr-${Date.now()}`,
+          type: context.recentEntities.lastSearchEngine === 'youtube' ? 'OPEN_WEBSITE' : 'SEARCH_WEB',
+          title: `Search: "${combinedQuery}"`,
+          url: context.recentEntities.lastSearchEngine === 'youtube' ? createSafeYouTubeUrl(combinedQuery) : createSafeGoogleSearchUrl(combinedQuery),
+          query: combinedQuery,
           status: 'pending',
-        },
-        {
-          id: 'step-2',
-          order: 2,
-          description: `Synthesize core summary and concepts`,
-          status: 'pending',
-        },
-      ],
-      currentStepIndex: 0,
-      status: 'planning',
-      createdAt: Date.now(),
-    };
-
-    return {
-      isContextualFollowUp: true,
-      resolvedAction: searchAction,
-      confidence: 'HIGH_CONFIDENCE',
-      missionPlan: mission,
-      updatedTopic: 'search',
-      updatedEntities: { lastSearchQuery: topic, lastSearchEngine: 'google', lastTopicEntity: topic },
-      proactiveSuggestion: `Want me to look up video demonstrations on YouTube for ${topic}?`,
-    };
-  }
-
-  // 4. Reference Pronouns & Anaphora: "wahi", "same", "phir se", "dobara", "previous one"
-  // e.g. "phir se karo", "dobara chalao", "repeat that"
-  const isRepeatMatch =
-    lower === 'phir se' ||
-    lower === 'phir se karo' ||
-    lower === 'dobara' ||
-    lower === 'dobara karo' ||
-    lower === 'repeat that' ||
-    lower === 'same again' ||
-    lower === 'do it again' ||
-    lower === 'once more';
-
-  if (isRepeatMatch && context.activeAction) {
-    const repeatedAction: VajraAction = {
-      ...context.activeAction,
-      id: `act-repeat-${Date.now()}`,
-      status: 'pending',
-    };
-    return {
-      isContextualFollowUp: true,
-      resolvedAction: repeatedAction,
-      confidence: 'HIGH_CONFIDENCE',
-      updatedTopic: context.currentTopic,
-      updatedEntities: { ...context.recentEntities },
-      syntheticResponse: `Repeating previous operation: ${repeatedAction.title}.`,
-    };
-  }
-
-  // e.g. "Ab wahi Java ke liye karo", "Wahi Python ke liye karo", "Same for Java"
-  const wahiMatch = trimmed.match(
-    /(?:ab\s+)?(?:wahi|same|yahi)\s+([A-Za-z0-9_\s+#]+?)\s+(?:ke\s+liye\s+(?:karo|chalao|dhoondo)|for)/i
-  );
-  if (wahiMatch && (context.currentTopic === 'search' || context.activeAction?.type === 'SEARCH_WEB' || context.activeAction?.url?.includes('youtube.com'))) {
-    const targetEntity = wahiMatch[1].trim();
-    if (targetEntity.length > 0) {
-      const isYt = context.activeAction?.url?.includes('youtube.com') || context.recentEntities.lastSearchEngine === 'youtube';
-      const action: VajraAction = isYt
-        ? {
-            id: `act-yt-ref-${Date.now()}`,
-            type: 'OPEN_WEBSITE',
-            title: `YouTube: "${targetEntity}"`,
-            url: createSafeYouTubeUrl(targetEntity),
-            description: `YouTube search for "${targetEntity}".`,
-            status: 'pending',
-          }
-        : {
-            id: `act-search-ref-${Date.now()}`,
-            type: 'SEARCH_WEB',
-            title: `Search: "${targetEntity}"`,
-            url: createSafeGoogleSearchUrl(targetEntity),
-            query: targetEntity,
-            description: `Google search for "${targetEntity}".`,
-            status: 'pending',
-          };
-
-      return {
-        isContextualFollowUp: true,
-        resolvedAction: action,
-        confidence: 'HIGH_CONFIDENCE',
-        updatedTopic: 'search',
-        updatedEntities: {
-          ...context.recentEntities,
-          lastSearchQuery: targetEntity,
-          lastSearchEngine: isYt ? 'youtube' : 'google',
-        },
-      };
+        };
+        return { isContextualFollowUp: true, resolvedAction: action, confidence: 'HIGH_CONFIDENCE', updatedTopic: 'search', updatedEntities: { ...context.recentEntities, lastSearchQuery: combinedQuery } };
+      }
     }
   }
 
-  // 4.5. Pronoun & Attribute References: "iska", "usko", "woh", "yeh"
-  // e.g. "Ab iska beginner tutorial dhoondo", "Iska documentation dikhao", "Usko search karo", "Yeh kholo"
-  const iskaMatch = trimmed.match(
-    /^(?:ab\s+)?(?:iska|ispe|iske|usko|uske|iska\s+ek|uska|yeh|woh)\s+([a-zA-Z0-9_\s+#]+?)(?:\s+(?:search\s+karo|dhoondo|batao|kholo|dikhao|dekho))?$/i
-  );
-  if (iskaMatch && (context.currentTopic === 'search' || context.recentEntities.lastSearchQuery || context.recentEntities.lastTopicEntity)) {
-    const parentEntity = context.recentEntities.lastSearchQuery || context.recentEntities.lastTopicEntity || '';
-    const subAttribute = iskaMatch[1].trim();
-
-    if (
-      parentEntity &&
-      subAttribute &&
-      !['kholo', 'dhoondo', 'dikhao', 'search', 'wala'].includes(subAttribute.toLowerCase())
-    ) {
-      const combinedQuery = `${parentEntity} ${subAttribute}`;
-      const isYt = context.recentEntities.lastSearchEngine === 'youtube';
-      const action: VajraAction = isYt
-        ? {
-            id: `act-yt-ref-attr-${Date.now()}`,
-            type: 'OPEN_WEBSITE',
-            title: `YouTube: "${combinedQuery}"`,
-            url: createSafeYouTubeUrl(combinedQuery),
-            description: `Search YouTube for "${combinedQuery}".`,
-            status: 'pending',
-          }
-        : {
-            id: `act-search-ref-attr-${Date.now()}`,
-            type: 'SEARCH_WEB',
-            title: `Search: "${combinedQuery}"`,
-            url: createSafeGoogleSearchUrl(combinedQuery),
-            query: combinedQuery,
-            description: `Google search for "${combinedQuery}".`,
-            status: 'pending',
-          };
-
-      return {
-        isContextualFollowUp: true,
-        resolvedAction: action,
-        confidence: 'HIGH_CONFIDENCE',
-        updatedTopic: 'search',
-        updatedEntities: {
-          ...context.recentEntities,
-          lastSearchQuery: combinedQuery,
-        },
-      };
-    }
-  }
-
-  // 4.6. Ordinal References: "pehla wala", "doosra wala", "first one", "second one"
-  const isPehlaWala = lower.includes('pehla wala') || lower.includes('first one') || lower.includes('pehla result') || lower === 'pehla' || lower === 'first';
-  const isDoosraWala = lower.includes('doosra wala') || lower.includes('second one') || lower.includes('dusra wala') || lower.includes('doosra result') || lower === 'doosra' || lower === 'second';
-
-  if ((isPehlaWala || isDoosraWala) && (context.activeMission || context.recentEntities.lastSearchQuery || context.activeAction)) {
-    const targetIndex = isPehlaWala ? 0 : 1;
-    const missionStep = context.activeMission?.steps?.[targetIndex];
-    if (missionStep && missionStep.action) {
-      return {
-        isContextualFollowUp: true,
-        resolvedAction: missionStep.action,
-        confidence: 'HIGH_CONFIDENCE',
-        syntheticResponse: `Opening ${isPehlaWala ? 'first' : 'second'} item: ${missionStep.description}.`,
-      };
-    } else if (context.activeAction) {
-      return {
-        isContextualFollowUp: true,
-        resolvedAction: context.activeAction,
-        confidence: 'HIGH_CONFIDENCE',
-        syntheticResponse: `Selected item: ${context.activeAction.title}.`,
-      };
-    }
-  }
-
-  // 5. Sequential Search Follow-ups: "Ab <X>", "Ab <X> wala", "Now <X>", "<X> wala"
-  // e.g. User searched "Python" previously. Now says: "Ab Java", "Ab Java wala", "Now React", "Java search karo"
-  const abSearchMatch = trimmed.match(
-    /^(?:ab|now|next)\s+([a-zA-Z0-9_+#\s]{2,40}?)(?:\s+(?:wala|search|dhoondo|batao|kholo|ka))?$/i
-  );
-  if (abSearchMatch && (context.currentTopic === 'search' || context.recentEntities.lastSearchQuery)) {
-    const nextQuery = abSearchMatch[1].replace(/^(?:search|kholo)\s+/i, '').trim();
-    if (
-      nextQuery.length > 1 &&
-      !['calculator', 'notepad', 'weather', 'settings', 'files', 'help'].includes(nextQuery.toLowerCase())
-    ) {
-      const isYt = context.recentEntities.lastSearchEngine === 'youtube';
-      const action: VajraAction = isYt
-        ? {
-            id: `act-yt-seq-${Date.now()}`,
-            type: 'OPEN_WEBSITE',
-            title: `YouTube: "${nextQuery}"`,
-            url: createSafeYouTubeUrl(nextQuery),
-            description: `YouTube search for "${nextQuery}".`,
-            status: 'pending',
-          }
-        : {
-            id: `act-search-seq-${Date.now()}`,
-            type: 'SEARCH_WEB',
-            title: `Search: "${nextQuery}"`,
-            url: createSafeGoogleSearchUrl(nextQuery),
-            query: nextQuery,
-            description: `Google search for "${nextQuery}".`,
-            status: 'pending',
-          };
-
-      return {
-        isContextualFollowUp: true,
-        resolvedAction: action,
-        confidence: 'HIGH_CONFIDENCE',
-        updatedTopic: 'search',
-        updatedEntities: {
-          ...context.recentEntities,
-          lastSearchQuery: nextQuery,
-        },
-      };
-    }
-  }
-
-  // 6. Weather Contextual Follow-ups: "Kal ka?", "Kal ka mausam?", "Tomorrow?", "Weekend ka?"
-  // e.g. User asked "Weather batao". Then says: "Kal ka?", "Tomorrow?", "Kal kaisa rahega?"
-  const isWeatherFollowUp =
-    (lower === 'kal ka?' ||
-      lower === 'kal ka' ||
-      lower === 'kal ka mausam' ||
-      lower === 'kal kaisa rahega' ||
-      lower === 'tomorrow?' ||
-      lower === 'tomorrow' ||
-      lower === 'what about tomorrow?' ||
-      lower === 'what about tomorrow' ||
-      lower === 'weekend ka?' ||
-      lower === 'aaj ka?') &&
-    (context.currentTopic === 'weather' || context.lastUserRequest.toLowerCase().includes('weather') || context.lastUserRequest.toLowerCase().includes('mausam'));
-
-  if (isWeatherFollowUp) {
-    const query = lower.includes('kal') || lower.includes('tomorrow')
-      ? 'tomorrow weather forecast'
-      : lower.includes('weekend')
-      ? 'weekend weather forecast'
-      : 'current weather forecast';
-
-    const action: VajraAction = {
-      id: `act-weather-seq-${Date.now()}`,
-      type: 'SEARCH_WEB',
-      title: `Weather: ${query}`,
-      url: createSafeGoogleSearchUrl(query),
-      query,
-      description: `Checking forecast: ${query}`,
-      status: 'pending',
-    };
-
-    return {
-      isContextualFollowUp: true,
-      resolvedAction: action,
-      confidence: 'HIGH_CONFIDENCE',
-      updatedTopic: 'weather',
-      updatedEntities: {
-        ...context.recentEntities,
-        lastSearchQuery: query,
-      },
-    };
-  }
-
-  // 7. Math & Calculator Contextual Calculations
-  // e.g. User said "Calculator kholo". Then says "500 ka 18 percent", "1200 + 450", "500 * 0.18"
-  // or user asks directly "500 ka 18 percent nikaal"
-  const mathValue = evaluateSafeMath(trimmed);
-  const hasMathKeywords =
-    trimmed.includes('%') ||
-    lower.includes('percent') ||
-    lower.includes('plus') ||
-    lower.includes('minus') ||
-    lower.includes('multiply') ||
-    lower.includes('divide') ||
-    lower.includes('guna') ||
-    lower.includes('bhaag') ||
-    lower.includes('jodo') ||
-    lower.includes('ghatao') ||
-    lower.includes('hisab');
-
-  if (mathValue !== null && (context.currentTopic === 'calculator' || hasMathKeywords || context.recentEntities.lastApp === 'Calculator')) {
-    const formattedResult = `${mathValue}`;
-    const syntheticResponse = `### 🧮 VAJRA Math Engine\n\n**Expression**: \`${trimmed}\`\n**Result**: **\`${formattedResult}\`**\n\n*Computed locally with mathematical precision.*`;
-
-    return {
-      isContextualFollowUp: true,
-      confidence: 'HIGH_CONFIDENCE',
-      syntheticResponse,
-      updatedTopic: 'calculator',
-      updatedEntities: {
-        ...context.recentEntities,
-        lastMathExpression: trimmed,
-        lastMathResult: formattedResult,
-        lastApp: 'Calculator',
-      },
-      proactiveSuggestion: `Want me to save this result (${formattedResult}) to your Scratchpad note?`,
-    };
-  }
-
-  // 8. Controlled Proactivity: Follow-up on Maps Navigation
-  // e.g. After opening a location in maps, user asks "Rasta batao" or "Navigate karo"
-  if (
-    (lower === 'rasta batao' || lower === 'start navigation' || lower === 'directions dikhao' || lower === 'navigate karo') &&
-    (context.currentTopic === 'navigation' || context.recentEntities.lastLocation)
-  ) {
-    const loc = context.recentEntities.lastLocation || 'destination';
-    const action: VajraAction = {
-      id: `act-nav-${Date.now()}`,
-      type: 'OPEN_WEBSITE',
-      title: `Navigate to ${loc}`,
-      url: `https://maps.google.com/maps/dir/?api=1&destination=${encodeURIComponent(loc)}`,
-      description: `Opening turn-by-turn navigation coordinates for ${loc}.`,
-      status: 'pending',
-    };
-    return {
-      isContextualFollowUp: true,
-      resolvedAction: action,
-      confidence: 'HIGH_CONFIDENCE',
-      updatedTopic: 'navigation',
-      updatedEntities: { ...context.recentEntities },
-    };
-  }
-
-  // 9. Default: Not a recognized follow-up pattern. Pass through cleanly.
+  // Default: Not a recognized follow-up pattern.
   return {
     isContextualFollowUp: false,
     confidence: 'HIGH_CONFIDENCE',

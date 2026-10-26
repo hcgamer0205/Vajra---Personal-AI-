@@ -2106,7 +2106,7 @@ export default function App() {
             customUiColor={appearanceConfig.customUiColor}
             onOpenCoreSettings={() => setIsCoreSettingsOpen(true)}
             isMobileMode={device.isMobile}
-            mobileCoreMode={messages.length > 0 ? 'compact' : 'hero'}
+            mobileCoreMode={mobileViewMode === 'conversation' ? 'compact' : 'hero'}
           />
         )}
       </main>
