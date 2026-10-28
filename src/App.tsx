@@ -20,6 +20,13 @@ import { SecurityConfirmModal } from './components/SecurityConfirmModal';
 import { VoiceDiagnosticHUD } from './components/VoiceDiagnosticHUD';
 import { VajraOnboardingModal } from './components/VajraOnboardingModal';
 import { CoreSettingsModal } from './components/CoreSettingsModal';
+import { StarkVisionModal } from './components/tools/StarkVisionModal';
+import { StarkDatabaseModal } from './components/tools/StarkDatabaseModal';
+import { StarkProtocolModal } from './components/tools/StarkProtocolModal';
+import { StarkAppLinkHubModal } from './components/tools/StarkAppLinkHubModal';
+import { StarkUpdateManagerModal } from './components/tools/StarkUpdateManagerModal';
+import { StarkHealthDashboardModal } from './components/tools/StarkHealthDashboardModal';
+import { starkProtocols, StarkProtocolInfo } from './services/starkProtocols';
 import { Message, ModelOption, VajraAction, AssistantState, VajraUserConfig } from './types';
 import { fetchModelConfig, streamChatCompletion } from './services/api';
 import { llmManager } from './services/llm';
@@ -102,6 +109,12 @@ export default function App() {
   const [isLanguageSheetOpen, setIsLanguageSheetOpen] = useState(false);
   const [isRemindersSheetOpen, setIsRemindersSheetOpen] = useState(false);
   const [isConversationSheetOpen, setIsConversationSheetOpen] = useState(false);
+  const [isStarkVisionOpen, setIsStarkVisionOpen] = useState(false);
+  const [isStarkDatabaseOpen, setIsStarkDatabaseOpen] = useState(false);
+  const [isStarkProtocolOpen, setIsStarkProtocolOpen] = useState(false);
+  const [isAppLinkHubOpen, setIsAppLinkHubOpen] = useState(false);
+  const [isUpdateManagerOpen, setIsUpdateManagerOpen] = useState(false);
+  const [isHealthDashboardOpen, setIsHealthDashboardOpen] = useState(false);
 
   // First-Time Setup & Onboarding State
   const [isSetupOpen, setIsSetupOpen] = useState<boolean>(() => {
@@ -1245,6 +1258,20 @@ export default function App() {
       }
     }
 
+    // 0.15. Stark Industries JARVIS Tactical Protocol Directives
+    const matchedProtocolId = starkProtocols.detectProtocolCommand(text);
+    if (matchedProtocolId) {
+      const protoInfo = starkProtocols.triggerProtocol(matchedProtocolId);
+      if (matchedProtocolId === 'CLEAN_SLATE') {
+        handleClearTelemetry();
+      }
+      showTemporaryNotification(protoInfo.activationPrompt, 'info', 4500);
+      speakText(protoInfo.voicePhrase);
+      setHudExecutionStatus('✓ PROTOCOL ENGAGED');
+      setTimeout(() => setHudExecutionStatus(null), 2500);
+      return;
+    }
+
     // 0.2. Adaptive Learning from User Corrections & Feedback
     if (vajraLearning.isLearningActive()) {
       const correction = vajraLearning.evaluateUtteranceForCorrection(text);
@@ -2177,6 +2204,12 @@ export default function App() {
             onOpenPhoneControls={() => setIsPhoneControlsOpen(true)}
             onOpenLanguageSheet={() => setIsLanguageSheetOpen(true)}
             onOpenRemindersSheet={() => setIsRemindersSheetOpen(true)}
+            onOpenStarkVision={() => setIsStarkVisionOpen(true)}
+            onOpenStarkDatabase={() => setIsStarkDatabaseOpen(true)}
+            onOpenStarkProtocolModal={() => setIsStarkProtocolOpen(true)}
+            onOpenAppLinkHub={() => setIsAppLinkHubOpen(true)}
+            onOpenUpdateManager={() => setIsUpdateManagerOpen(true)}
+            onOpenHealthDashboard={() => setIsHealthDashboardOpen(true)}
             onTriggerProtocol={(directive) => {
               handleSendMessage(directive);
             }}
@@ -2248,9 +2281,60 @@ export default function App() {
             onOpenWebsite={() => setIsUrlModalOpen(true)}
             onSearchWeb={() => setIsSearchModalOpen(true)}
             onOpenTools={() => setIsAppModalOpen(true)}
+            onOpenStarkVision={() => setIsStarkVisionOpen(true)}
+            onOpenStarkDatabase={() => setIsStarkDatabaseOpen(true)}
+            onOpenStarkProtocolModal={() => setIsStarkProtocolOpen(true)}
           />
         </footer>
       )}
+
+      {/* J.A.R.V.I.S. Stark Modals & Terminals */}
+      <StarkVisionModal
+        isOpen={isStarkVisionOpen}
+        onClose={() => setIsStarkVisionOpen(false)}
+        onAnalyzeSnapshot={(analysisText) => {
+          setIsStarkVisionOpen(false);
+          handleSendMessage(analysisText);
+        }}
+      />
+
+      <StarkDatabaseModal
+        isOpen={isStarkDatabaseOpen}
+        onClose={() => setIsStarkDatabaseOpen(false)}
+        onSelectDataPrompt={(prompt) => {
+          setIsStarkDatabaseOpen(false);
+          handleSendMessage(prompt);
+        }}
+      />
+
+      <StarkProtocolModal
+        isOpen={isStarkProtocolOpen}
+        onClose={() => setIsStarkProtocolOpen(false)}
+        onExecuteProtocol={(proto) => {
+          setIsStarkProtocolOpen(false);
+          showTemporaryNotification(proto.activationPrompt, 'info', 4000);
+          speakText(proto.voicePhrase);
+        }}
+      />
+
+      <StarkAppLinkHubModal
+        isOpen={isAppLinkHubOpen}
+        onClose={() => setIsAppLinkHubOpen(false)}
+        onLaunchLink={(title, target) => {
+          setIsAppLinkHubOpen(false);
+          handleSendMessage(`Open ${title} (${target})`);
+        }}
+      />
+
+      <StarkUpdateManagerModal
+        isOpen={isUpdateManagerOpen}
+        onClose={() => setIsUpdateManagerOpen(false)}
+      />
+
+      <StarkHealthDashboardModal
+        isOpen={isHealthDashboardOpen}
+        onClose={() => setIsHealthDashboardOpen(false)}
+      />
     </div>
   );
 }

@@ -10,6 +10,8 @@ import {
   Activity,
   Radio,
   Zap,
+  Eye,
+  Database,
 } from 'lucide-react';
 import { AssistantState } from '../types';
 
@@ -28,6 +30,9 @@ interface VajraVoiceConsoleProps {
   onOpenWebsite?: () => void;
   onSearchWeb?: () => void;
   onOpenTools?: () => void;
+  onOpenStarkVision?: () => void;
+  onOpenStarkDatabase?: () => void;
+  onOpenStarkProtocolModal?: () => void;
 }
 
 export const VajraVoiceConsole: React.FC<VajraVoiceConsoleProps> = ({
@@ -45,6 +50,9 @@ export const VajraVoiceConsole: React.FC<VajraVoiceConsoleProps> = ({
   onOpenWebsite,
   onSearchWeb,
   onOpenTools,
+  onOpenStarkVision,
+  onOpenStarkDatabase,
+  onOpenStarkProtocolModal,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -140,15 +148,39 @@ export const VajraVoiceConsole: React.FC<VajraVoiceConsoleProps> = ({
             </button>
           )}
 
-          {onOpenTools && (
+          {onOpenStarkVision && (
             <button
               type="button"
-              onClick={onOpenTools}
+              onClick={onOpenStarkVision}
               className="hidden sm:flex items-center gap-1 px-2 py-0.5 rounded bg-[#0e0205] hover:bg-[#1a040b] border border-amber-500/20 hover:border-amber-400/70 text-[9px] font-mono text-amber-300/80 hover:text-white transition-all cursor-pointer shadow-sm"
-              title="Tools: Calculator, Notepad, Files"
+              title="Stark AR Vision Scanner (Camera Multimodal AI)"
             >
-              <Wrench className="w-2.5 h-2.5 text-amber-400" />
-              <span>Tools</span>
+              <Eye className="w-2.5 h-2.5 text-amber-400" />
+              <span>Vision</span>
+            </button>
+          )}
+
+          {onOpenStarkDatabase && (
+            <button
+              type="button"
+              onClick={onOpenStarkDatabase}
+              className="hidden md:flex items-center gap-1 px-2 py-0.5 rounded bg-[#0e0205] hover:bg-[#1a040b] border border-amber-500/20 hover:border-amber-400/70 text-[9px] font-mono text-cyan-300/80 hover:text-white transition-all cursor-pointer shadow-sm"
+              title="Stark Technical Database (Physics, Elements, Formulas)"
+            >
+              <Database className="w-2.5 h-2.5 text-cyan-400" />
+              <span>Database</span>
+            </button>
+          )}
+
+          {onOpenStarkProtocolModal && (
+            <button
+              type="button"
+              onClick={onOpenStarkProtocolModal}
+              className="hidden md:flex items-center gap-1 px-2 py-0.5 rounded bg-[#0e0205] hover:bg-[#1a040b] border border-red-500/30 hover:border-red-400 text-[9px] font-mono text-red-300/90 hover:text-white transition-all cursor-pointer shadow-sm"
+              title="Stark Protocol Execution Matrix"
+            >
+              <Zap className="w-2.5 h-2.5 text-red-400 animate-pulse" />
+              <span>Protocols</span>
             </button>
           )}
         </div>

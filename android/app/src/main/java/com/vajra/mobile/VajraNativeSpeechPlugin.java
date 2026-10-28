@@ -3,12 +3,14 @@ package com.vajra.mobile;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import androidx.core.content.ContextCompat;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
@@ -19,6 +21,8 @@ import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * VAJRA Mobile — Native Android Speech Recognition & Wake Word Plugin
@@ -27,7 +31,7 @@ import java.util.Locale;
  * Supports:
  * 1. Command Recognition (single-shot directive capture)
  * 2. Dedicated Wake Word Listening ("Hello Vajra", "Hey Vajra", "Hi Vajra")
- * 3. Lifecycle-aware resource management and mutual exclusion.
+ * 3. Lifecycle-aware resource management and permission validation.
  */
 @CapacitorPlugin(
     name = "VajraNativeSpeech",
@@ -48,10 +52,21 @@ public class VajraNativeSpeechPlugin extends Plugin {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private Runnable restartWakeRunnable = null;
 
+    private static final Pattern WAKE_REGEX = Pattern.compile(
+        "^(?:hello|hey|hi|ok|acha|suno|oye|vaire)?[\\s,.:;!-]*(?:vajra|jarvis)\\b[\\s,.:;!-]*([\\s\\S]*)$",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    private boolean hasAudioPermission() {
+        Context context = getContext();
+        if (context == null) return false;
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+    }
+
     @PluginMethod
     public void isAvailable(PluginCall call) {
         Context context = getContext();
-        boolean available = SpeechRecognizer.isRecognitionAvailable(context);
+        boolean available = context != null && SpeechRecognizer.isRecognitionAvailable(context);
         JSObject ret = new JSObject();
         ret.put("available", available);
         call.resolve(ret);
@@ -60,20 +75,22 @@ public class VajraNativeSpeechPlugin extends Plugin {
     @PluginMethod
     public void checkPermission(PluginCall call) {
         JSObject ret = new JSObject();
-        PermissionState state = getPermissionState("speechRecognition");
-        if (state == PermissionState.GRANTED) {
+        if (hasAudioPermission()) {
             ret.put("permissionState", "GRANTED");
-        } else if (state == PermissionState.DENIED) {
-            ret.put("permissionState", "DENIED");
         } else {
-            ret.put("permissionState", "NOT_REQUESTED");
+            PermissionState state = getPermissionState("speechRecognition");
+            if (state == PermissionState.DENIED) {
+                ret.put("permissionState", "DENIED");
+            } else {
+                ret.put("permissionState", "NOT_REQUESTED");
+            }
         }
         call.resolve(ret);
     }
 
     @PluginMethod
     public void requestPermission(PluginCall call) {
-        if (getPermissionState("speechRecognition") == PermissionState.GRANTED) {
+        if (hasAudioPermission()) {
             JSObject ret = new JSObject();
             ret.put("permissionState", "GRANTED");
             call.resolve(ret);
@@ -85,7 +102,7 @@ public class VajraNativeSpeechPlugin extends Plugin {
     @PermissionCallback
     private void speechPermissionCallback(PluginCall call) {
         JSObject ret = new JSObject();
-        if (getPermissionState("speechRecognition") == PermissionState.GRANTED) {
+        if (hasAudioPermission()) {
             ret.put("permissionState", "GRANTED");
         } else {
             ret.put("permissionState", "DENIED");
@@ -95,11 +112,23 @@ public class VajraNativeSpeechPlugin extends Plugin {
 
     @PluginMethod
     public void startListening(PluginCall call) {
-        if (getPermissionState("speechRecognition") != PermissionState.GRANTED) {
-            call.reject("Microphone permission not granted");
+        if (!hasAudioPermission()) {
+            requestPermissionForAlias("speechRecognition", call, "startListeningPermissionCallback");
             return;
         }
+        startListeningInternal(call);
+    }
 
+    @PermissionCallback
+    private void startListeningPermissionCallback(PluginCall call) {
+        if (hasAudioPermission()) {
+            startListeningInternal(call);
+        } else {
+            call.reject("Microphone permission is required for voice input.");
+        }
+    }
+
+    private void startListeningInternal(PluginCall call) {
         final String language = call.getString("language", "en-US");
 
         mainHandler.post(() -> {
@@ -111,7 +140,7 @@ public class VajraNativeSpeechPlugin extends Plugin {
                 cleanupRecognizerInternal();
 
                 Context context = getContext();
-                if (!SpeechRecognizer.isRecognitionAvailable(context)) {
+                if (context == null || !SpeechRecognizer.isRecognitionAvailable(context)) {
                     call.reject("Speech recognition is not available on this device.");
                     return;
                 }
@@ -175,11 +204,23 @@ public class VajraNativeSpeechPlugin extends Plugin {
 
     @PluginMethod
     public void startWakeWord(PluginCall call) {
-        if (getPermissionState("speechRecognition") != PermissionState.GRANTED) {
-            call.reject("Microphone permission required for wake word detection");
+        if (!hasAudioPermission()) {
+            requestPermissionForAlias("speechRecognition", call, "startWakePermissionCallback");
             return;
         }
+        startWakeWordInternal(call);
+    }
 
+    @PermissionCallback
+    private void startWakePermissionCallback(PluginCall call) {
+        if (hasAudioPermission()) {
+            startWakeWordInternal(call);
+        } else {
+            call.reject("Microphone permission required for wake word");
+        }
+    }
+
+    private void startWakeWordInternal(PluginCall call) {
         final String language = call.getString("language", "en-US");
 
         mainHandler.post(() -> {
@@ -225,7 +266,7 @@ public class VajraNativeSpeechPlugin extends Plugin {
         pauseWakeInternal();
 
         Context context = getContext();
-        if (!SpeechRecognizer.isRecognitionAvailable(context)) {
+        if (context == null || !SpeechRecognizer.isRecognitionAvailable(context)) {
             return;
         }
 
@@ -249,7 +290,6 @@ public class VajraNativeSpeechPlugin extends Plugin {
 
                 @Override
                 public void onError(int error) {
-                    // On silence or no-match in wake standby, cleanly schedule a short restart
                     if (isWakeWordActive && !isListening) {
                         scheduleWakeRestart(language);
                     }
@@ -260,7 +300,8 @@ public class VajraNativeSpeechPlugin extends Plugin {
                     ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                     if (matches != null && !matches.isEmpty()) {
                         checkWakeCandidate(matches.get(0), language);
-                    } else if (isWakeWordActive && !isListening) {
+                    }
+                    if (isWakeWordActive && !isListening) {
                         scheduleWakeRestart(language);
                     }
                 }
@@ -299,27 +340,19 @@ public class VajraNativeSpeechPlugin extends Plugin {
     private void checkWakeCandidate(String rawText, String language) {
         if (rawText == null || !isWakeWordActive || isListening) return;
 
-        String clean = rawText.trim().toLowerCase(Locale.ROOT);
-        String matchedPhrase = null;
-        String remainingCommand = "";
+        String clean = rawText.trim();
+        Matcher matcher = WAKE_REGEX.matcher(clean);
 
-        if (clean.startsWith("hello vajra")) {
-            matchedPhrase = "Hello Vajra";
-            remainingCommand = rawText.trim().substring(Math.min(rawText.trim().length(), 11)).trim();
-        } else if (clean.startsWith("hey vajra")) {
-            matchedPhrase = "Hey Vajra";
-            remainingCommand = rawText.trim().substring(Math.min(rawText.trim().length(), 9)).trim();
-        } else if (clean.startsWith("hi vajra")) {
-            matchedPhrase = "Hi Vajra";
-            remainingCommand = rawText.trim().substring(Math.min(rawText.trim().length(), 8)).trim();
-        }
+        if (matcher.find()) {
+            String lower = clean.toLowerCase(Locale.ROOT);
+            String matchedPhrase = "Hello Vajra";
+            if (lower.startsWith("hey")) matchedPhrase = "Hey Vajra";
+            else if (lower.startsWith("hi")) matchedPhrase = "Hi Vajra";
 
-        if (matchedPhrase != null) {
-            // Wake word detected! Immediately pause wake listening
-            pauseWakeInternal();
-
-            // Clean leading punctuation from remaining command
+            String remainingCommand = matcher.group(1) != null ? matcher.group(1).trim() : "";
             remainingCommand = remainingCommand.replaceFirst("^[\\s,.:;!-]+", "").trim();
+
+            pauseWakeInternal();
 
             JSObject data = new JSObject();
             data.put("phrase", matchedPhrase);
@@ -339,7 +372,7 @@ public class VajraNativeSpeechPlugin extends Plugin {
                 startWakeInternal(language);
             }
         };
-        mainHandler.postDelayed(restartWakeRunnable, 600);
+        mainHandler.postDelayed(restartWakeRunnable, 800);
     }
 
     private void cancelWakeRestart() {
@@ -353,6 +386,7 @@ public class VajraNativeSpeechPlugin extends Plugin {
     private void pauseWakeInternal() {
         if (wakeRecognizer != null) {
             try {
+                wakeRecognizer.setRecognitionListener(null);
                 wakeRecognizer.cancel();
             } catch (Exception ignored) {}
             try {
@@ -387,6 +421,7 @@ public class VajraNativeSpeechPlugin extends Plugin {
         isListening = false;
         if (speechRecognizer != null) {
             try {
+                speechRecognizer.setRecognitionListener(null);
                 speechRecognizer.cancel();
             } catch (Exception ignored) {}
             try {

@@ -120,7 +120,7 @@ export const HologramDisplay: React.FC<HologramDisplayProps> = ({
       const calculated = isMobileMode
         ? mobileCoreMode === 'compact'
           ? Math.max(88, Math.min(130, Math.floor(maxAllowed * 0.4)))
-          : Math.max(160, Math.min(300, Math.floor(maxAllowed)))
+          : Math.max(220, Math.min(Math.floor(maxAllowed * 0.92), 560))
         : Math.max(220, Math.min(820, Math.floor(maxAllowed)));
 
       setSphereSize(calculated);

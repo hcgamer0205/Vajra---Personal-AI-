@@ -247,6 +247,11 @@ export class VoiceController {
   public async requestPermission(): Promise<MicrophonePermissionState> {
     if (this.isNativeAndroid()) {
       try {
+        const check = await VajraNativeSpeech.checkPermission();
+        if (check.permissionState === 'GRANTED') {
+          this.permissionState = 'GRANTED';
+          return 'GRANTED';
+        }
         const res = await VajraNativeSpeech.requestPermission();
         this.permissionState = res.permissionState;
         return this.permissionState;
@@ -256,15 +261,41 @@ export class VoiceController {
       }
     }
 
-    if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+    if (this.permissionState === 'GRANTED') {
+      return 'GRANTED';
+    }
+
+    if (typeof navigator === 'undefined') {
+      this.permissionState = 'UNAVAILABLE';
+      return 'UNAVAILABLE';
+    }
+
+    if (navigator.permissions && typeof navigator.permissions.query === 'function') {
+      try {
+        const status = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+        if (status.state === 'granted') {
+          this.permissionState = 'GRANTED';
+          return 'GRANTED';
+        } else if (status.state === 'denied') {
+          this.permissionState = 'DENIED';
+          return 'DENIED';
+        }
+      } catch {}
+    }
+
+    if (this.hasWebSpeechSupport()) {
+      this.permissionState = 'GRANTED';
+      return 'GRANTED';
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia) {
       this.permissionState = 'UNAVAILABLE';
       return 'UNAVAILABLE';
     }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      // Immediately close probing stream to avoid leaving microphone indicator active
-      stream.getTracks().forEach((track) => track.stop());
+      this.currentStream = stream;
       this.permissionState = 'GRANTED';
       return 'GRANTED';
     } catch (err: any) {

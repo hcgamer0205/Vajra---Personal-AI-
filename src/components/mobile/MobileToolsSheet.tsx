@@ -18,6 +18,7 @@ import {
   ShieldAlert,
   Terminal,
   Crosshair,
+  RefreshCw,
 } from 'lucide-react';
 import { MobileBottomSheet } from './MobileBottomSheet';
 import { starkAudio } from '../../services/starkAudio';
@@ -38,6 +39,12 @@ interface MobileToolsSheetProps {
   onOpenLanguageSheet?: () => void;
   onOpenRemindersSheet?: () => void;
   onTriggerProtocol?: (protocolDirective: string) => void;
+  onOpenStarkVision?: () => void;
+  onOpenStarkDatabase?: () => void;
+  onOpenStarkProtocolModal?: () => void;
+  onOpenAppLinkHub?: () => void;
+  onOpenUpdateManager?: () => void;
+  onOpenHealthDashboard?: () => void;
 }
 
 export const MobileToolsSheet: React.FC<MobileToolsSheetProps> = ({
@@ -56,8 +63,38 @@ export const MobileToolsSheet: React.FC<MobileToolsSheetProps> = ({
   onOpenLanguageSheet,
   onOpenRemindersSheet,
   onTriggerProtocol,
+  onOpenStarkVision,
+  onOpenStarkDatabase,
+  onOpenStarkProtocolModal,
+  onOpenAppLinkHub,
+  onOpenUpdateManager,
+  onOpenHealthDashboard,
 }) => {
   const tools = [
+    {
+      id: 'app_link_hub',
+      title: 'Stark App Link Hub',
+      description: 'Editable shortcuts for apps, web links, YouTube & deep links',
+      icon: Globe,
+      color: 'from-amber-500/20 to-yellow-500/20 text-amber-300 border-amber-500/40',
+      action: onOpenAppLinkHub || onOpenCoreSettings,
+    },
+    {
+      id: 'update_manager',
+      title: 'Auto-Update & Upgrade Manager',
+      description: 'Check signed release metadata, download APK & launch installer',
+      icon: RefreshCw,
+      color: 'from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/40',
+      action: onOpenUpdateManager || onOpenCoreSettings,
+    },
+    {
+      id: 'health_dashboard',
+      title: 'Stark System Health Dashboard',
+      description: 'Live checks for permissions, WebGL, battery, network & export report',
+      icon: Activity,
+      color: 'from-emerald-500/20 to-teal-500/20 text-emerald-300 border-emerald-500/40',
+      action: onOpenHealthDashboard || onOpenCoreSettings,
+    },
     {
       id: 'calc',
       title: 'In-App Calculator',

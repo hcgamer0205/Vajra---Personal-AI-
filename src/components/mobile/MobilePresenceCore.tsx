@@ -203,28 +203,45 @@ export const MobilePresenceCore: React.FC<MobilePresenceCoreProps> = ({
     );
   }
 
-  const [viewportWidth, setViewportWidth] = React.useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth : 360
-  );
+  const heroContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const [coreDimension, setCoreDimension] = React.useState<number>(340);
 
   React.useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(window.innerWidth);
+    const updateDimension = () => {
+      if (!heroContainerRef.current) return;
+      const rect = heroContainerRef.current.getBoundingClientRect();
+      const availW = rect.width;
+      const availH = rect.height;
+      if (availW <= 0 || availH <= 0) return;
+
+      // Deduct 48px vertical buffer for state badge & status padding
+      const maxAvailable = Math.min(availW - 24, availH - 48);
+      // Scale comfortably between 260px and 520px depending on screen height/width
+      const calculated = Math.max(260, Math.min(Math.floor(maxAvailable * 0.92), 520));
+      setCoreDimension(calculated);
     };
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
+
+    updateDimension();
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && heroContainerRef.current) {
+      ro = new ResizeObserver(updateDimension);
+      ro.observe(heroContainerRef.current);
+    }
+
+    window.addEventListener('resize', updateDimension);
+    window.addEventListener('orientationchange', updateDimension);
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
+      if (ro) ro.disconnect();
+      window.removeEventListener('resize', updateDimension);
+      window.removeEventListener('orientationchange', updateDimension);
     };
   }, []);
-
-  // Dynamic responsive dimension: scales comfortably on small Android phones (e.g. 360px) up to tablets
-  const responsiveDimension = Math.min(Math.max(viewportWidth - 48, 280), 380);
 
   // Pure Minimal JARVIS Hero Presence: Centered Living Energy Sphere on Midnight Canvas
   return (
     <div
+      ref={heroContainerRef}
       id="vajra-mobile-hero-presence"
       className={`flex-1 w-full flex flex-col items-center justify-center relative select-none px-4 overflow-hidden bg-black ${className}`}
     >
@@ -270,8 +287,9 @@ export const MobilePresenceCore: React.FC<MobilePresenceCoreProps> = ({
           showRings={true}
           coreTheme={coreTheme}
           customCoreColor={customCoreColor}
-          customDimension={responsiveDimension}
+          customDimension={coreDimension}
           audioAmplitude={audioAmplitude}
+          onClick={onTapCore}
         />
       </button>
 
